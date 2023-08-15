@@ -24,6 +24,7 @@ import { Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { makeSelectLogin } from 'src/pages/pages/login/loginSlice'
 import { useRouter } from 'next/router'
+import Header from 'src/components/Header'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -75,6 +76,7 @@ const VerticalLayout = props => {
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* {login && ( */}
         <>
+          <Header {...props} />
           {/* <Navigation
             navWidth={navWidth}
             navVisible={navVisible}
