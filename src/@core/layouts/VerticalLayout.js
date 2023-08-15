@@ -16,6 +16,8 @@ import themeConfig from 'src/configs/themeConfig'
 import AppBar from './components/vertical/appBar'
 import Navigation from './components/vertical/navigation'
 import Footer from './components/shared-components/footer'
+import Header from './components/shared-components/header'
+
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 // ** Styled Component
@@ -24,7 +26,6 @@ import { Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { makeSelectLogin } from 'src/pages/pages/login/loginSlice'
 import { useRouter } from 'next/router'
-import Header from 'src/components/Header'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -76,7 +77,6 @@ const VerticalLayout = props => {
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* {login && ( */}
         <>
-          <Header {...props} />
           {/* <Navigation
             navWidth={navWidth}
             navVisible={navVisible}
@@ -86,6 +86,8 @@ const VerticalLayout = props => {
           /> */}
           <MainContentWrapper className='layout-content-wrapper'>
             {/* <AppBar toggleNavVisibility={toggleNavVisibility} {...props} /> */}
+
+            <Header {...props} />
 
             <ContentWrapper
               className='layout-page-content'
