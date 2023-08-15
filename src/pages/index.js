@@ -129,9 +129,9 @@ const LoginPage = () => {
 
   // Xử lí khi nhấn phím enter
   const handleKeyDown = event => {
-    if (event.key === 'Enter') {
-      // Đoạn mã xử lý khi nhấn phím Enter ở đây
-    }
+    // if (event.key === 'Enter') {
+    //   // Đoạn mã xử lý khi nhấn phím Enter ở đây
+    // }
   }
 
   // Xử lí khi người dùng click vào icon hide/show password
