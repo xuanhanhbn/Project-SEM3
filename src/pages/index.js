@@ -1,14 +1,15 @@
 import React from 'react'
+import { Carousel } from 'antd'
 
 function HomePage() {
   return (
     <div>
-       {/* Slider */}
-      <section className='hero-wrap js-fullheight'>
-        <div className='home-slider js-fullheight owl-carousel'>
+      {/* Carousel */}
+      {/* <section className='hero-wrap js-fullheight'> */}
+      {/* <div className='home-slider js-fullheight owl-carousel'>
           <div
             className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + 'https://technext.github.io/unicare/images/bg_1.jpg' + ')' }}
+            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
           >
             <div className='overlay-1'></div>
             <div className='overlay-2'></div>
@@ -41,7 +42,10 @@ function HomePage() {
             </div>
           </div>
 
-          <div className='slider-item js-fullheight' style={{ backgroundImage: 'url(' + 'https://technext.github.io/unicare/images/bg_2.jpg' + ')' }}>
+          <div
+            className='slider-item js-fullheight'
+            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
+          >
             <div className='overlay-1'></div>
             <div className='overlay-2'></div>
             <div className='overlay-3'></div>
@@ -73,7 +77,114 @@ function HomePage() {
             </div>
           </div>
 
-          <div className='slider-item js-fullheight' style={{ backgroundImage: 'url(../../public/images/bg_3.jpg)' }}>
+          <div className='slider-item js-fullheight' style={{ backgroundImage: 'url(../../images/bg_3.jpg)' }}>
+            <div className='overlay-1'></div>
+            <div className='overlay-2'></div>
+            <div className='overlay-3'></div>
+            <div className='overlay-4'></div>
+            <div className='container'>
+              <div className='row no-gutters slider-text js-fullheight align-items-center'>
+                <div className='col-md-10 col-lg-7 ftco-animate'>
+                  <div className='text w-100'>
+                    <h2>Raising Hope</h2>
+                    <h1 className='mb-3'>Giving Hope to the Homeless People</h1>
+                    <div className='d-flex meta'>
+                      <div className=''>
+                        <p className='mb-0'>
+                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
+                            Become A Volunteer
+                          </a>
+                        </p>
+                      </div>
+                      <a href='#' className='d-flex align-items-center button-link'>
+                        <div className='button-video d-flex align-items-center justify-content-center'>
+                          <span className='fa fa-play'></span>
+                        </div>
+                        <span>Watch our video</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+      {/* </section> */}
+
+      <Carousel autoplay className='hero-wrap js-fullheight'>
+        <div className='home-slider js-fullheight owl-carousel'>
+          <div
+            className='slider-item js-fullheight'
+            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
+          >
+            <div className='overlay-1'></div>
+            <div className='overlay-2'></div>
+            <div className='overlay-3'></div>
+            <div className='overlay-4'></div>
+            <div className='container'>
+              <div className='row no-gutters slider-text js-fullheight align-items-center'>
+                <div className='col-md-10 col-lg-7 ftco-animate'>
+                  <div className='text w-100'>
+                    <h2>Help the poor in need</h2>
+                    <h1 className='mb-3'>Lend the helping hand get involved</h1>
+                    <div className='d-flex meta'>
+                      <div className=''>
+                        <p className='mb-0'>
+                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
+                            Become A Volunteer
+                          </a>
+                        </p>
+                      </div>
+                      <a href='#' className='d-flex align-items-center button-link'>
+                        <div className='button-video d-flex align-items-center justify-content-center'>
+                          <span className='fa fa-play'></span>
+                        </div>
+                        <span>Watch our video</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className='slider-item js-fullheight'
+            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
+          >
+            <div className='overlay-1'></div>
+            <div className='overlay-2'></div>
+            <div className='overlay-3'></div>
+            <div className='overlay-4'></div>
+            <div className='container'>
+              <div className='row no-gutters slider-text js-fullheight align-items-center'>
+                <div className='col-md-10 col-lg-7 ftco-animate'>
+                  <div className='text w-100'>
+                    <h2>Raising Hope</h2>
+                    <h1 className='mb-3'>Discover Non-Profit Charity Platform</h1>
+                    <div className='d-flex meta'>
+                      <div className=''>
+                        <p className='mb-0'>
+                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
+                            Become A Volunteer
+                          </a>
+                        </p>
+                      </div>
+                      <a href='#' className='d-flex align-items-center button-link'>
+                        <div className='button-video d-flex align-items-center justify-content-center'>
+                          <span className='fa fa-play'></span>
+                        </div>
+                        <span>Watch our video</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className='slider-item js-fullheight'
+            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
+          >
             <div className='overlay-1'></div>
             <div className='overlay-2'></div>
             <div className='overlay-3'></div>
@@ -105,7 +216,7 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </Carousel>
 
       {/* Donation */}
       <section className='ftco-appointment ftco-section ftco-no-pt ftco-no-pb img'>
@@ -300,7 +411,7 @@ function HomePage() {
                   </h3>
                   <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
                 </div>
-                <div className='img border-2' style={{ backgroundImage: 'url(../../public/images/services-1.jpg)' }}>
+                <div className='img border-2' style={{ backgroundImage: 'url(../../images/services-1.jpg)' }}>
                   <div className='icon d-flex align-items-center justify-content-center'>
                     <span className='flaticon-volunteer'></span>
                   </div>
@@ -316,7 +427,7 @@ function HomePage() {
                   </h3>
                   <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
                 </div>
-                <div className='img border-3' style={{ backgroundImage: 'url(../../public/images/services-2.jpg)' }}>
+                <div className='img border-3' style={{ backgroundImage: 'url(../../images/services-2.jpg)' }}>
                   <div className='icon d-flex align-items-center justify-content-center'>
                     <span className='flaticon-piggy-bank'></span>
                   </div>
@@ -332,7 +443,7 @@ function HomePage() {
                   </h3>
                   <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
                 </div>
-                <div className='img border-1' style={{ backgroundImage: 'url(../../public/images/services-3.jpg)' }}>
+                <div className='img border-1' style={{ backgroundImage: 'url(../../images/services-3.jpg)' }}>
                   <div className='icon d-flex align-items-center justify-content-center'>
                     <span className='flaticon-donation'></span>
                   </div>
@@ -348,7 +459,7 @@ function HomePage() {
                   </h3>
                   <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
                 </div>
-                <div className='img border-4' style={{ backgroundImage: 'url(../../public/images/services-4.jpg)' }}>
+                <div className='img border-4' style={{ backgroundImage: 'url(../../images/services-4.jpg)' }}>
                   <div className='icon d-flex align-items-center justify-content-center'>
                     <span className='flaticon-ecological'></span>
                   </div>
@@ -371,11 +482,7 @@ function HomePage() {
           <div className='row'>
             <div className='col-md-6 col-lg-3'>
               <div className='causes causes-2 text-center ftco-animate'>
-                <a
-                  href='#'
-                  className='img w-100'
-                  style={{ backgroundImage: 'url(../../public/images/causes-1.jpg)' }}
-                ></a>
+                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-1.jpg)' }}></a>
                 <div className='text p-3'>
                   <h2>
                     <a href='#'>Save the poor children from hunger</a>
@@ -401,11 +508,7 @@ function HomePage() {
             </div>
             <div className='col-md-6 col-lg-3'>
               <div className='causes causes-2 text-center ftco-animate'>
-                <a
-                  href='#'
-                  className='img w-100'
-                  style={{ backgroundImage: 'url(../../public/images/causes-2.jpg)' }}
-                ></a>
+                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-2.jpg)' }}></a>
                 <div className='text p-3'>
                   <h2>
                     <a href='#'>Save the poor children from hunger</a>
@@ -431,11 +534,7 @@ function HomePage() {
             </div>
             <div className='col-md-6 col-lg-3'>
               <div className='causes causes-2 text-center ftco-animate'>
-                <a
-                  href='#'
-                  className='img w-100'
-                  style={{ backgroundImage: 'url(../../public/images/causes-3.jpg)' }}
-                ></a>
+                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-3.jpg)' }}></a>
                 <div className='text p-3'>
                   <h2>
                     <a href='#'>Save the poor children from hunger</a>
@@ -461,11 +560,7 @@ function HomePage() {
             </div>
             <div className='col-md-6 col-lg-3'>
               <div className='causes causes-2 text-center ftco-animate'>
-                <a
-                  href='#'
-                  className='img w-100'
-                  style={{ backgroundImage: 'url(../../public/images/causes-4.jpg)' }}
-                ></a>
+                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-4.jpg)' }}></a>
                 <div className='text p-3'>
                   <h2>
                     <a href='#'>Save the poor children from hunger</a>
@@ -492,7 +587,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
 
       {/* Quick stats */}
       <section className='ftco-counter' id='section-counter'>
@@ -577,10 +671,7 @@ function HomePage() {
               <div className='carousel-testimony owl-carousel'>
                 <div className='item'>
                   <div className='testimony-wrap d-flex'>
-                    <div
-                      className='user-img'
-                      style={{ backgroundImage: 'url(../../public/images/person-1.jpg)' }}
-                    ></div>
+                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-1.jpg)' }}></div>
                     <div className='text pl-4'>
                       <span className='quote d-flex align-items-center justify-content-center'>
                         <i className='fa fa-quote-left'></i>
@@ -600,10 +691,7 @@ function HomePage() {
                 </div>
                 <div className='item'>
                   <div className='testimony-wrap d-flex'>
-                    <div
-                      className='user-img'
-                      style={{ backgroundImage: 'url(../../public/images/person-2.jpg)' }}
-                    ></div>
+                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-2.jpg)' }}></div>
                     <div className='text pl-4'>
                       <span className='quote d-flex align-items-center justify-content-center'>
                         <i className='fa fa-quote-left'></i>
@@ -623,10 +711,7 @@ function HomePage() {
                 </div>
                 <div className='item'>
                   <div className='testimony-wrap d-flex'>
-                    <div
-                      className='user-img'
-                      style={{ backgroundImage: 'url(../../public/images/person-3.jpg)' }}
-                    ></div>
+                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-3.jpg)' }}></div>
                     <div className='text pl-4'>
                       <span className='quote d-flex align-items-center justify-content-center'>
                         <i className='fa fa-quote-left'></i>
@@ -646,10 +731,7 @@ function HomePage() {
                 </div>
                 <div className='item'>
                   <div className='testimony-wrap d-flex'>
-                    <div
-                      className='user-img'
-                      style={{ backgroundImage: 'url(../../public/images/person-4.jpg)' }}
-                    ></div>
+                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-4.jpg)' }}></div>
                     <div className='text pl-4'>
                       <span className='quote d-flex align-items-center justify-content-center'>
                         <i className='fa fa-quote-left'></i>
@@ -669,10 +751,7 @@ function HomePage() {
                 </div>
                 <div className='item'>
                   <div className='testimony-wrap d-flex'>
-                    <div
-                      className='user-img'
-                      style={{ backgroundImage: 'url(../../public/images/person-1.jpg)' }}
-                    ></div>
+                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-1.jpg)' }}></div>
                     <div className='text pl-4'>
                       <span className='quote d-flex align-items-center justify-content-center'>
                         <i className='fa fa-quote-left'></i>

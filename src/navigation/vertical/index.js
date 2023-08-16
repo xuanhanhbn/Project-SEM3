@@ -76,58 +76,58 @@ const navigation = () => {
     //   role: ['Admin', 'EMPOYLEE']
     // },
 
-    {
-      sectionTitle: 'Customer Ticket',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale']
-    },
-    {
-      title: 'Ticket Lists Customer',
-      icon: TicketConfirmationOutline,
-      path: '/ticket-lists',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale']
-    },
-    {
-      sectionTitle: 'Employee',
-      isShowMenu: true,
-      role: ['Admin']
-    },
-    {
-      title: 'Employee List',
-      icon: AccountGroupOutline,
-      path: '/staff',
-      isShowMenu: true,
-      role: ['Admin']
-    },
+    // {
+    //   sectionTitle: 'Customer Ticket',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale']
+    // },
+    // {
+    //   title: 'Ticket Lists Customer',
+    //   icon: TicketConfirmationOutline,
+    //   path: '/ticket-lists',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale']
+    // },
+    // {
+    //   sectionTitle: 'Employee',
+    //   isShowMenu: true,
+    //   role: ['Admin']
+    // },
+    // {
+    //   title: 'Employee List',
+    //   icon: AccountGroupOutline,
+    //   path: '/staff',
+    //   isShowMenu: true,
+    //   role: ['Admin']
+    // },
 
-    {
-      sectionTitle: 'Customer List',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
-    },
-    {
-      title: 'Customer',
-      icon: AccountCogOutline,
-      path: '/customer-dashboard',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
-    },
-    {
-      title: 'Transactions',
-      icon: FileDocumentMultipleOutline,
-      path: '/transactions',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager'],
-      disabled: true
-    },
-    {
-      icon: CreditCardOutline,
-      title: 'Customer Service',
-      path: '/customer-care',
-      isShowMenu: true,
-      role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
-    }
+    // {
+    //   sectionTitle: 'Customer List',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
+    // },
+    // {
+    //   title: 'Customer',
+    //   icon: AccountCogOutline,
+    //   path: '/customer-dashboard',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
+    // },
+    // {
+    //   title: 'Transactions',
+    //   icon: FileDocumentMultipleOutline,
+    //   path: '/transactions',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager'],
+    //   disabled: true
+    // },
+    // {
+    //   icon: CreditCardOutline,
+    //   title: 'Customer Service',
+    //   path: '/customer-care',
+    //   isShowMenu: true,
+    //   role: ['Admin', 'SaleManager', 'Sale', 'Hr', 'HrManager']
+    // }
 
     // {
     //   title: 'Documents',
