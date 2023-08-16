@@ -61,7 +61,7 @@ const HeaderContent = () => {
       <nav className='navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light' id='ftco-navbar'>
         <div className='container'>
           <Link href='/'>
-            <ImgStyled src='/images/logo/Give-AID-logos_transparent.png' alt='' />
+            <ImgStyled src='/images/logos/Give-AID-logos_transparent.png' alt='' />
           </Link>
           <button
             className='navbar-toggler'
