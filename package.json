@@ -79,6 +79,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.9",
+    "react-responsive-carousel": "^3.2.23",
     "react-select": "^5.7.4",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
