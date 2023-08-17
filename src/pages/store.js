@@ -17,16 +17,21 @@ import accountSettingReducer from 'src/views/account-settings/accountSettingSlic
 import dashboardSaga from 'src/views/dashboard/dashboardSaga'
 import dashboardReducer from 'src/views/dashboard/dashboardSlice'
 
+// ABOUT US
+import aboutSaga from 'src/views/AboutUs/aboutSaga'
+import aboutReducer from 'src/views/AboutUs/aboutSlice'
+
 // registry reducer
 const reducers = combineReducers({
   login: loginReducer,
   setting: accountSettingReducer,
-  dashboard: dashboardReducer
+  dashboard: dashboardReducer,
+  about: aboutReducer
 })
 
 // registry sagas
 function* rootSaga() {
-  yield all([loginSaga(), accountSettingSaga(), dashboardSaga()])
+  yield all([loginSaga(), accountSettingSaga(), dashboardSaga(), aboutSaga()])
 }
 
 // const persistConfig = {

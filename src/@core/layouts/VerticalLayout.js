@@ -65,10 +65,10 @@ const VerticalLayout = props => {
   // ** Toggle Functions
   const toggleNavVisibility = () => setNavVisible(!navVisible)
 
-  useEffect(() => {
-    const dataLoginPage = JSON.parse(localStorage.getItem('loginPage'))
-    setLogin(dataLoginPage)
-  }, [])
+  // useEffect(() => {
+  //   const dataLoginPage = JSON.parse(localStorage.getItem('loginPage'))
+  //   setLogin(dataLoginPage)
+  // }, [])
 
   return (
     <>

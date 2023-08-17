@@ -37,31 +37,13 @@ const Dashboard = () => {
   const router = useRouter()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
 
-  useEffect(() => {
-    if (dataLogin && dataUser?.roles?.toString() === 'Admin') {
-      dispatch(dashboardActions.getListDashBoard())
-    } else {
-      router.back()
-    }
-  }, [dataLogin])
-
-  // const handleGetUrlImage = async () => {
-  //   const idPicture = JSON.parse(localStorage.getItem('dataUser'))
-
-  //   try {
-  //     setIsLoadingCo(true)
-  //     const url = `Document/File/${idPicture?.profilePictureId}`
-  //     const res = await getApiDefault(url)
-  //     if (res && res.status === 200) {
-  //       setIsLoadingCo(false)
-  //       localStorage.setItem('urlImage', JSON.stringify(url))
-  //     }
-  //   } catch (error) {
-  //     setIsLoadingCo(false)
-
-  //     return handleShowSnackbar('Có lỗi trong quá trình thực hiện', 'warning')
+  // useEffect(() => {
+  //   if (dataLogin && dataUser?.roles?.toString() === 'Admin') {
+  //     dispatch(dashboardActions.getListDashBoard())
+  //   } else {
+  //     router.back()
   //   }
-  // }
+  // }, [dataLogin])
 
   return (
     <ApexChartWrapper className='d-flex justify-content-center align-items-center'>

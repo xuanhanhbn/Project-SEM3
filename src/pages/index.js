@@ -109,15 +109,15 @@ const LoginPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin])
 
-  useEffect(() => {
-    if (dataUser && Object.keys(dataUser).length) {
-      if (dataUser?.roles?.toString() === 'Admin') {
-        router.push('/admin/dashboard')
-      } else {
-        router.push('/customer-dashboard')
-      }
-    }
-  }, [dataUser])
+  // useEffect(() => {
+  //   if (dataUser && Object.keys(dataUser).length) {
+  //     if (dataUser?.roles?.toString() === 'Admin') {
+  //       router.push('/admin/dashboard')
+  //     } else {
+  //       router.push('/customer-dashboard')
+  //     }
+  //   }
+  // }, [dataUser])
 
   // Xử lí khi đăng nhập thất bại
   useEffect(() => {
@@ -282,9 +282,9 @@ const LoginPage = () => {
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              onClick={handleSubmit(onSubmit)}
+              onClick={() => router.push('/admin/dashboard')}
 
-              // onClick={() => router.push('/customer-dashboard')}
+              // onClick={handleSubmit(onSubmit)}
             >
               Login
             </Button>

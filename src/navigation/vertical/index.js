@@ -31,6 +31,20 @@ const navigation = () => {
       path: '/admin/dashboard',
       isShowMenu: true,
       role: ['Admin']
+    },
+    {
+      title: 'AboutUs',
+      icon: HomeOutline,
+      path: '/about-us',
+      isShowMenu: true,
+      role: ['Admin']
+    },
+    {
+      title: 'Create AboutUs',
+      icon: HomeOutline,
+      path: '/about-us/form-create',
+      isShowMenu: false,
+      role: ['Admin']
     }
   ]
 }

@@ -16,7 +16,7 @@ const VerticalNavItems = props => {
     if (item.isShowMenu) {
       const TagName = resolveNavItemComponent(item)
 
-      return <TagName {...props} key={index} item={item} />
+      return <TagName {...props} key={index.toString()} item={item} />
     }
   })
 
