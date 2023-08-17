@@ -52,6 +52,12 @@ const navigation = () => {
       isShowMenu: true,
       role: ['Admin', 'Hr', 'HrManager']
     },
+    {
+      title: 'About us',
+      icon: TicketConfirmationOutline,
+      path: '/about-us',
+      isShowMenu: true,
+    },
 
     // {
     //   title: 'Forums',
