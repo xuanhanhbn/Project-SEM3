@@ -1,0 +1,32 @@
+.importimg {
+    width: 500px;
+    height: 200px;
+    background-image: url("image/img1.png");
+}
+
+.importimg1 {
+    width: 500px;
+    height: 200px;
+    background-image: url("image/img2.png");
+}
+
+.importimg2 {
+    width: 500px;
+    height: 200px;
+    background-image: url("image/img3.png");
+}
+
+.importimg3 {
+    width: 500px;
+    height: 200px;
+    background-image: url("image/img4.png");
+}
+
+.carousel {
+    width: 500px;
+    height: 200px;
+}
+
+.button {
+    padding-left: 80px;
+}

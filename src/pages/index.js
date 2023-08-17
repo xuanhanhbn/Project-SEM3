@@ -1,781 +1,336 @@
-import React from 'react'
-import { Carousel } from 'antd'
+/* eslint-disable react-hooks/exhaustive-deps */
+// ** React Imports
+import { useEffect, useState } from 'react'
 
-function HomePage() {
+// ** Next Imports
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+
+// ** MUI Components
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import Checkbox from '@mui/material/Checkbox'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import { styled, useTheme } from '@mui/material/styles'
+import MuiCard from '@mui/material/Card'
+import InputAdornment from '@mui/material/InputAdornment'
+import MuiFormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
+import { loginPageActions, makeSelectLogin } from './pages/login/loginSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+// ** Icons Imports
+import Google from 'mdi-material-ui/Google'
+import Github from 'mdi-material-ui/Github'
+import Twitter from 'mdi-material-ui/Twitter'
+import Facebook from 'mdi-material-ui/Facebook'
+import EyeOutline from 'mdi-material-ui/EyeOutline'
+import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+
+// ** Configs
+import themeConfig from 'src/configs/themeConfig'
+
+// ** Layout Import
+import BlankLayout from 'src/@core/layouts/BlankLayout'
+
+// ** Demo Imports
+import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import input from 'src/@core/theme/overrides/input'
+import { inputLogin } from './pages/login/constants'
+import ForgotPassword from './pages/forgot-password'
+import { useSnackbar } from 'notistack'
+import Loading from 'src/components/Loading'
+import { FilledInput } from '@mui/material'
+
+const validationSchema = Yup.object().shape({
+  identifier: Yup.string().required('User name is required'),
+  password: Yup.string().required('Password is required')
+})
+
+// ** Styled Components
+const Card = styled(MuiCard)(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: { width: '28rem' }
+}))
+
+const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    fontSize: '0.875rem',
+    color: theme.palette.text.secondary
+  }
+}))
+
+const LoginPage = () => {
+  // ** Hook
+  const theme = useTheme()
+  const router = useRouter()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
+
+  const [onOpen, setOnOpen] = useState(false)
+  const [isShowPassword, setIsShowPassword] = useState(false)
+
+  // useForm
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
+  const dispatch = useDispatch()
+
+  // Xử lí khi ấn nút Login
+  const onSubmit = data => {
+    dispatch(loginPageActions.loginPage(data))
+  }
+
+  // Lấy dữ liệu từ api trả về
+  const dataLoginPage = useSelector(makeSelectLogin)
+  const { isSuccess, dataLogin, isLoading, isError, isLogin } = dataLoginPage
+  const dataUser = dataLoginPage?.dataUser
+
+  // Xử lí khi đăng nhập thành công
+  useEffect(() => {
+    if (isLogin) {
+      dispatch(loginPageActions.clear())
+      dispatch(loginPageActions.userInfo())
+
+      handleShowSnackbar('Login Success')
+      localStorage.setItem('loginPage', JSON.stringify(dataLogin))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogin])
+
+  useEffect(() => {
+    if (dataUser && Object.keys(dataUser).length) {
+      if (dataUser?.roles?.toString() === 'Admin') {
+        router.push('/admin/dashboard')
+      } else {
+        router.push('/customer-dashboard')
+      }
+    }
+  }, [dataUser])
+
+  // Xử lí khi đăng nhập thất bại
+  useEffect(() => {
+    if (isError) {
+      dispatch(loginPageActions.clear())
+      handleShowSnackbar('There was an error. Please try again.', 'error')
+    }
+  }, [isError])
+
+  // Xử lí khi nhấn phím enter
+  const handleKeyDown = event => {
+    if (event.key === 'Enter') {
+      // Đoạn mã xử lý khi nhấn phím Enter ở đây
+    }
+  }
+
+  // Xử lí khi người dùng click vào icon hide/show password
+  const handleClickShowPassword = () => setIsShowPassword(!isShowPassword)
+
+  // Xử lí khi click vào quên mật khẩu
+  const handleForgotPassword = () => setOnOpen(true)
+
   return (
-    <div>
-      {/* Carousel */}
-      {/* <section className='hero-wrap js-fullheight'> */}
-      {/* <div className='home-slider js-fullheight owl-carousel'>
-          <div
-            className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
-          >
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Help the poor in need</h2>
-                    <h1 className='mb-3'>Lend the helping hand get involved</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <Box className='content-center'>
+      <Card sx={{ zIndex: 1 }}>
+        <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg
+              width={35}
+              height={29}
+              version='1.1'
+              viewBox='0 0 30 23'
+              xmlns='http://www.w3.org/2000/svg'
+              xmlnsXlink='http://www.w3.org/1999/xlink'
+            >
+              <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+                <g id='Artboard' transform='translate(-95.000000, -51.000000)'>
+                  <g id='logo' transform='translate(95.000000, 50.000000)'>
+                    <path
+                      id='Combined-Shape'
+                      fill={theme.palette.primary.main}
+                      d='M30,21.3918362 C30,21.7535219 29.9019196,22.1084381 29.7162004,22.4188007 C29.1490236,23.366632 27.9208668,23.6752135 26.9730355,23.1080366 L26.9730355,23.1080366 L23.714971,21.1584295 C23.1114106,20.7972624 22.7419355,20.1455972 22.7419355,19.4422291 L22.7419355,19.4422291 L22.741,12.7425689 L15,17.1774194 L7.258,12.7425689 L7.25806452,19.4422291 C7.25806452,20.1455972 6.88858935,20.7972624 6.28502902,21.1584295 L3.0269645,23.1080366 C2.07913318,23.6752135 0.850976404,23.366632 0.283799571,22.4188007 C0.0980803893,22.1084381 2.0190442e-15,21.7535219 0,21.3918362 L0,3.58469444 L0.00548573643,3.43543209 L0.00548573643,3.43543209 L0,3.5715689 C3.0881846e-16,2.4669994 0.8954305,1.5715689 2,1.5715689 C2.36889529,1.5715689 2.73060353,1.67359571 3.04512412,1.86636639 L15,9.19354839 L26.9548759,1.86636639 C27.2693965,1.67359571 27.6311047,1.5715689 28,1.5715689 C29.1045695,1.5715689 30,2.4669994 30,3.5715689 L30,3.5715689 Z'
+                    />
+                    <polygon
+                      id='Rectangle'
+                      opacity='0.077704'
+                      fill={theme.palette.common.black}
+                      points='0 8.58870968 7.25806452 12.7505183 7.25806452 16.8305646'
+                    />
+                    <polygon
+                      id='Rectangle'
+                      opacity='0.077704'
+                      fill={theme.palette.common.black}
+                      points='0 8.58870968 7.25806452 12.6445567 7.25806452 15.1370162'
+                    />
+                    <polygon
+                      id='Rectangle'
+                      opacity='0.077704'
+                      fill={theme.palette.common.black}
+                      points='22.7419355 8.58870968 30 12.7417372 30 16.9537453'
+                      transform='translate(26.370968, 12.771227) scale(-1, 1) translate(-26.370968, -12.771227) '
+                    />
+                    <polygon
+                      id='Rectangle'
+                      opacity='0.077704'
+                      fill={theme.palette.common.black}
+                      points='22.7419355 8.58870968 30 12.6409734 30 15.2601969'
+                      transform='translate(26.370968, 11.924453) scale(-1, 1) translate(-26.370968, -11.924453) '
+                    />
+                    <path
+                      id='Rectangle'
+                      fillOpacity='0.15'
+                      fill={theme.palette.common.white}
+                      d='M3.04512412,1.86636639 L15,9.19354839 L15,9.19354839 L15,17.1774194 L0,8.58649679 L0,3.5715689 C3.0881846e-16,2.4669994 0.8954305,1.5715689 2,1.5715689 C2.36889529,1.5715689 2.73060353,1.67359571 3.04512412,1.86636639 Z'
+                    />
+                    <path
+                      id='Rectangle'
+                      fillOpacity='0.35'
+                      fill={theme.palette.common.white}
+                      transform='translate(22.500000, 8.588710) scale(-1, 1) translate(-22.500000, -8.588710) '
+                      d='M18.0451241,1.86636639 L30,9.19354839 L30,9.19354839 L30,17.1774194 L15,8.58649679 L15,3.5715689 C15,2.4669994 15.8954305,1.5715689 17,1.5715689 C17.3688953,1.5715689 17.7306035,1.67359571 18.0451241,1.86636639 Z'
+                    />
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <Typography
+              variant='h6'
+              sx={{
+                ml: 3,
+                lineHeight: 1,
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                fontSize: '1.5rem !important'
+              }}
+            >
+              {themeConfig.templateName}
+            </Typography>
+          </Box>
+          <Box sx={{ mb: 6 }}>
+            <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+              Welcome to Company Active! 👋🏻
+            </Typography>
+            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+          </Box>
+          <Loading isLoading={isLoading} />
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+            {inputLogin.map(input => {
+              const { field } = input
+              const message = errors[field] && errors[field].message
 
-          <div
-            className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
-          >
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Raising Hope</h2>
-                    <h1 className='mb-3'>Discover Non-Profit Charity Platform</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+              return (
+                <Grid key={input.field}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => {
+                      return (
+                        <TextField
+                          placeholder={input.lable}
+                          name={input.field}
+                          label={input.lable}
+                          value={value}
+                          type={isShowPassword ? 'text' : input.type}
+                          onChange={onChange}
+                          required
+                          fullWidth
+                          variant='outlined'
+                          style={{ marginBottom: 10 }}
+                          onKeyDown={handleKeyDown}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                {input.type === 'password' && (
+                                  <Button onClick={handleClickShowPassword}>
+                                    {isShowPassword ? <EyeOutline /> : <EyeOffOutline />}
+                                  </Button>
+                                )}
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      )
+                    }}
+                    name={input.field}
+                  />
 
-          <div className='slider-item js-fullheight' style={{ backgroundImage: 'url(../../images/bg_3.jpg)' }}>
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Raising Hope</h2>
-                    <h1 className='mb-3'>Giving Hope to the Homeless People</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-      {/* </section> */}
+                  <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
+                </Grid>
+              )
+            })}
 
-      <Carousel autoplay className='hero-wrap js-fullheight'>
-        <div className='home-slider js-fullheight owl-carousel'>
-          <div
-            className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
-          >
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Help the poor in need</h2>
-                    <h1 className='mb-3'>Lend the helping hand get involved</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
-          >
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Raising Hope</h2>
-                    <h1 className='mb-3'>Discover Non-Profit Charity Platform</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className='slider-item js-fullheight'
-            style={{ backgroundImage: 'url(' + '/images/carousel/bg_1.jpg' + ')' }}
-          >
-            <div className='overlay-1'></div>
-            <div className='overlay-2'></div>
-            <div className='overlay-3'></div>
-            <div className='overlay-4'></div>
-            <div className='container'>
-              <div className='row no-gutters slider-text js-fullheight align-items-center'>
-                <div className='col-md-10 col-lg-7 ftco-animate'>
-                  <div className='text w-100'>
-                    <h2>Raising Hope</h2>
-                    <h1 className='mb-3'>Giving Hope to the Homeless People</h1>
-                    <div className='d-flex meta'>
-                      <div className=''>
-                        <p className='mb-0'>
-                          <a href='#' className='btn btn-secondary py-3 px-2 px-md-4'>
-                            Become A Volunteer
-                          </a>
-                        </p>
-                      </div>
-                      <a href='#' className='d-flex align-items-center button-link'>
-                        <div className='button-video d-flex align-items-center justify-content-center'>
-                          <span className='fa fa-play'></span>
-                        </div>
-                        <span>Watch our video</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Carousel>
+            <Box
+              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
+            >
+              <FormControlLabel control={<Checkbox />} label='Remember Me' />
+              {/* <Link > */}
+              <Button onClick={() => handleForgotPassword()}>Forgot Password?</Button>
+              {/* </Link> */}
+            </Box>
+            <Button
+              fullWidth
+              size='large'
+              variant='contained'
+              sx={{ marginBottom: 7 }}
+              onClick={handleSubmit(onSubmit)}
 
-      {/* Donation */}
-      <section className='ftco-appointment ftco-section ftco-no-pt ftco-no-pb img'>
-        <div className='overlay'></div>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-md-5 order-md-last d-flex align-items-stretch'>
-              <div className='donation-wrap'>
-                <div className='total-donate d-flex align-items-center'>
-                  <span className='fa flaticon-cleaning'></span>
-                  <h4>
-                    Donation Campaign <br />
-                    are running
-                  </h4>
-                  <p className='d-flex align-items-center'>
-                    <span>$</span>
-                    <span className='number' data-number='24781'>
-                      0
-                    </span>
-                  </p>
-                </div>
-                <form action='#' className='appointment'>
-                  <div className='row'>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <label htmlFor='name'>Full Name</label>
-                        <div className='input-wrap'>
-                          <div className='icon'>
-                            <span className='fa fa-user'></span>
-                          </div>
-                          <input type='text' className='form-control' placeholder='' />
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <label htmlFor='name'>Email Address</label>
-                        <div className='input-wrap'>
-                          <div className='icon'>
-                            <span className='fa fa-paper-plane'></span>
-                          </div>
-                          <input type='email' className='form-control' placeholder='' />
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <label htmlFor='name'>Select Causes</label>
-                        <div className='form-field'>
-                          <div className='select-wrap'>
-                            <div className='icon'>
-                              <span className='fa fa-chevron-down'></span>
-                            </div>
-                            <select name='' id='' className='form-control'>
-                              <option value=''></option>
-                              <option value=''>House Washing</option>
-                              <option value=''>Roof Cleaning</option>
-                              <option value=''>Driveway Cleaning</option>
-                              <option value=''>Gutter Cleaning</option>
-                              <option value=''>Patio Cleaning</option>
-                              <option value=''>Building Cleaning</option>
-                              <option value=''>Concrete Cleaning</option>
-                              <option value=''>Sidewal Cleaning</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <label htmlFor='name'>Amount</label>
-                        <div className='input-wrap'>
-                          <div className='icon'>
-                            <span className='fa fa-money'></span>
-                          </div>
-                          <input type='text' className='form-control' placeholder='$5' />
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <label htmlFor='name'>Payment Method</label>
-                        <div className='d-lg-flex'>
-                          <div className='form-radio mr-3'>
-                            <div className='radio'>
-                              <label>
-                                <input type='radio' name='radio-input' checked />
-                                <span className='checkmark'></span>
-                                <span className='fill-control-description'>Credit Card</span>
-                              </label>
-                            </div>
-                          </div>
-                          <div className='form-radio mr-3'>
-                            <div className='radio'>
-                              <label>
-                                <input type='radio' name='radio-input' />
-                                <span className='checkmark'></span>
-                                <span className='fill-control-description'>Paypal</span>
-                              </label>
-                            </div>
-                          </div>
-                          <div className='form-radio'>
-                            <div className='radio'>
-                              <label>
-                                <input type='radio' name='radio-input' />
-                                <span className='checkmark'></span>
-                                <span className='fill-control-description'>Payoneer</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-md-12'>
-                      <div className='form-group'>
-                        <input type='submit' value='Donate Now' className='btn btn-secondary py-3 px-4' />
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div className='col-md-7 wrap-about py-5'>
-              <div className='heading-section pr-md-5 pt-md-5'>
-                <span className='subheading'>Welcome to unicare</span>
-                <h2 className='mb-4'>We are here to help everyone in need</h2>
-                <p>
-                  On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would
-                  have been rewritten a thousand times and everything that was left from its origin would be the word
-                  "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing
-                  the copy said could convince her and so it didn’t take long until a few insidious Copy Writers
-                  ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they
-                  abused her for their.
-                </p>
-              </div>
-              <div className='row my-md-5'>
-                <div className='col-md-6 d-flex counter-wrap'>
-                  <div className='block-18 d-flex'>
-                    <div className='icon d-flex align-items-center justify-content-center'>
-                      <span className='flaticon-volunteer'></span>
-                    </div>
-                    <div className='desc'>
-                      <div className='text'>
-                        <strong className='number' data-number='50'>
-                          0
-                        </strong>
-                      </div>
-                      <div className='text'>
-                        <span>Volunteers</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='col-md-6 d-flex counter-wrap'>
-                  <div className='block-18 d-flex'>
-                    <div className='icon d-flex align-items-center justify-content-center'>
-                      <span className='flaticon-piggy-bank'></span>
-                    </div>
-                    <div className='desc'>
-                      <div className='text'>
-                        <strong className='number' data-number='24400'>
-                          0
-                        </strong>
-                      </div>
-                      <div className='text'>
-                        <span>Trusted Funds</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p>
-                <a href='#' className='btn btn-secondary btn-outline-secondary'>
-                  Become A Volunteer
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Volunteer */}
-      <section className='ftco-section ftco-no-pt ftco-no-pb'>
-        <div className='container'>
-          <div className='row no-gutters'>
-            <div className='col-md-3 d-flex align-items-stretch'>
-              <div className='services'>
-                <div className='text text-center bg-secondary'>
-                  <h3>
-                    Become a <br />
-                    Volunteer
-                  </h3>
-                  <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
-                </div>
-                <div className='img border-2' style={{ backgroundImage: 'url(../../images/services-1.jpg)' }}>
-                  <div className='icon d-flex align-items-center justify-content-center'>
-                    <span className='flaticon-volunteer'></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-3 d-flex align-items-stretch'>
-              <div className='services'>
-                <div className='text text-center bg-tertiary'>
-                  <h3>
-                    Quick <br />
-                    Fundraising
-                  </h3>
-                  <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
-                </div>
-                <div className='img border-3' style={{ backgroundImage: 'url(../../images/services-2.jpg)' }}>
-                  <div className='icon d-flex align-items-center justify-content-center'>
-                    <span className='flaticon-piggy-bank'></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-3 d-flex align-items-stretch'>
-              <div className='services'>
-                <div className='text text-center bg-primary'>
-                  <h3>
-                    Start <br />
-                    Donating
-                  </h3>
-                  <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
-                </div>
-                <div className='img border-1' style={{ backgroundImage: 'url(../../images/services-3.jpg)' }}>
-                  <div className='icon d-flex align-items-center justify-content-center'>
-                    <span className='flaticon-donation'></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-3 d-flex align-items-stretch'>
-              <div className='services'>
-                <div className='text text-center bg-quarternary'>
-                  <h3>
-                    Get <br />
-                    Involved
-                  </h3>
-                  <p>But nothing the copy said could convince her and so it didn’t take long until a few</p>
-                </div>
-                <div className='img border-4' style={{ backgroundImage: 'url(../../images/services-4.jpg)' }}>
-                  <div className='icon d-flex align-items-center justify-content-center'>
-                    <span className='flaticon-ecological'></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Donate List */}
-      <section className='ftco-section ftco-no-pb'>
-        <div className='container'>
-          <div className='row justify-content-center pb-5 mb-3'>
-            <div className='col-md-7 heading-section text-center ftco-animate'>
-              <span className='subheading'>Our Causes</span>
-              <h2>Donate to charity causes around the world</h2>
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col-md-6 col-lg-3'>
-              <div className='causes causes-2 text-center ftco-animate'>
-                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-1.jpg)' }}></a>
-                <div className='text p-3'>
-                  <h2>
-                    <a href='#'>Save the poor children from hunger</a>
-                  </h2>
-                  <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                  <div className='goal mb-4'>
-                    <p>
-                      <span>$3,800</span> to go
-                    </p>
-                    <div className='progress' style={{ height: 20 }}>
-                      <div className='progress-bar progress-bar-striped' style={{ height: 20, width: '70%' }}>
-                        70%
-                      </div>
-                    </div>
-                  </div>
-                  <p>
-                    <a href='#' className='btn btn-light w-100'>
-                      Donate Now
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-6 col-lg-3'>
-              <div className='causes causes-2 text-center ftco-animate'>
-                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-2.jpg)' }}></a>
-                <div className='text p-3'>
-                  <h2>
-                    <a href='#'>Save the poor children from hunger</a>
-                  </h2>
-                  <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                  <div className='goal mb-4'>
-                    <p>
-                      <span>$3,800</span> to go
-                    </p>
-                    <div className='progress' style={{ height: 20 }}>
-                      <div className='progress-bar progress-bar-striped' style={{ height: 20, width: '82%' }}>
-                        82%
-                      </div>
-                    </div>
-                  </div>
-                  <p>
-                    <a href='#' className='btn btn-light w-100'>
-                      Donate Now
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-6 col-lg-3'>
-              <div className='causes causes-2 text-center ftco-animate'>
-                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-3.jpg)' }}></a>
-                <div className='text p-3'>
-                  <h2>
-                    <a href='#'>Save the poor children from hunger</a>
-                  </h2>
-                  <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                  <div className='goal mb-4'>
-                    <p>
-                      <span>$3,800</span> to go
-                    </p>
-                    <div className='progress' style={{ height: 20 }}>
-                      <div className='progress-bar progress-bar-striped' style={{ height: 20, width: '95%' }}>
-                        95%
-                      </div>
-                    </div>
-                  </div>
-                  <p>
-                    <a href='#' className='btn btn-light w-100'>
-                      Donate Now
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className='col-md-6 col-lg-3'>
-              <div className='causes causes-2 text-center ftco-animate'>
-                <a href='#' className='img w-100' style={{ backgroundImage: 'url(../../images/causes-4.jpg)' }}></a>
-                <div className='text p-3'>
-                  <h2>
-                    <a href='#'>Save the poor children from hunger</a>
-                  </h2>
-                  <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                  <div className='goal mb-4'>
-                    <p>
-                      <span>$3,800</span> to go
-                    </p>
-                    <div className='progress' style={{ height: 20 }}>
-                      <div className='progress-bar progress-bar-striped' style={{ height: 20, width: '75%' }}>
-                        75%
-                      </div>
-                    </div>
-                  </div>
-                  <p>
-                    <a href='#' className='btn btn-light w-100'>
-                      Donate Now
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick stats */}
-      <section className='ftco-counter' id='section-counter'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-md-3 mb-5 mb-md-0 text-center text-md-left'>
-              <h2 className='font-weight-bold' style={{ color: '#fff', fontSize: 22 }}>
-                We're on a mission to help all your problems
-              </h2>
-              <a href='#' className='btn btn-white btn-outline-white'>
-                Donate Now
-              </a>
-            </div>
-            <div className='col-md-9'>
-              <div className='row'>
-                <div className='col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate'>
-                  <div className='block-18 text-center'>
-                    <div className='text'>
-                      <strong className='number' data-number='88984'>
-                        0
-                      </strong>
-                    </div>
-                    <div className='text'>
-                      <span>Donation Campaigns are running</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate'>
-                  <div className='block-18 text-center'>
-                    <div className='text'>
-                      <strong className='number' data-number='65000'>
-                        0
-                      </strong>
-                    </div>
-                    <div className='text'>
-                      <span>Professional and kind volunteers</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate'>
-                  <div className='block-18 text-center'>
-                    <div className='text'>
-                      <strong className='number' data-number='77000'>
-                        0
-                      </strong>
-                    </div>
-                    <div className='text'>
-                      <span>Funds we raised till now on site</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate'>
-                  <div className='block-18 text-center'>
-                    <div className='text'>
-                      <strong className='number' data-number='50'>
-                        0
-                      </strong>
-                    </div>
-                    <div className='text'>
-                      <span>Dedicated Donors</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Feedbacks */}
-      <section className='ftco-section testimony-section'>
-        <div className='overlay'></div>
-        <div className='container'>
-          <div className='row justify-content-center pb-5'>
-            <div className='col-md-7 heading-section heading-section-white text-center ftco-animate'>
-              <span className='subheading'>Testimony</span>
-              <h2>Happy Clients &amp; Feedbacks</h2>
-            </div>
-          </div>
-          <div className='row ftco-animate'>
-            <div className='col-md-12'>
-              <div className='carousel-testimony owl-carousel'>
-                <div className='item'>
-                  <div className='testimony-wrap d-flex'>
-                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-1.jpg)' }}></div>
-                    <div className='text pl-4'>
-                      <span className='quote d-flex align-items-center justify-content-center'>
-                        <i className='fa fa-quote-left'></i>
-                      </span>
-                      <p className='rate'>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                      </p>
-                      <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                      <p className='name'>Racky Henderson</p>
-                      <span className='position'>Father</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='item'>
-                  <div className='testimony-wrap d-flex'>
-                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-2.jpg)' }}></div>
-                    <div className='text pl-4'>
-                      <span className='quote d-flex align-items-center justify-content-center'>
-                        <i className='fa fa-quote-left'></i>
-                      </span>
-                      <p className='rate'>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                      </p>
-                      <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                      <p className='name'>Henry Dee</p>
-                      <span className='position'>Businesswoman</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='item'>
-                  <div className='testimony-wrap d-flex'>
-                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-3.jpg)' }}></div>
-                    <div className='text pl-4'>
-                      <span className='quote d-flex align-items-center justify-content-center'>
-                        <i className='fa fa-quote-left'></i>
-                      </span>
-                      <p className='rate'>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                      </p>
-                      <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                      <p className='name'>Mark Huff</p>
-                      <span className='position'>Businesswoman</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='item'>
-                  <div className='testimony-wrap d-flex'>
-                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-4.jpg)' }}></div>
-                    <div className='text pl-4'>
-                      <span className='quote d-flex align-items-center justify-content-center'>
-                        <i className='fa fa-quote-left'></i>
-                      </span>
-                      <p className='rate'>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                      </p>
-                      <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                      <p className='name'>Benjie Busk Jr.</p>
-                      <span className='position'>Businesswoman</span>
-                    </div>
-                  </div>
-                </div>
-                <div className='item'>
-                  <div className='testimony-wrap d-flex'>
-                    <div className='user-img' style={{ backgroundImage: 'url(../../images/person-1.jpg)' }}></div>
-                    <div className='text pl-4'>
-                      <span className='quote d-flex align-items-center justify-content-center'>
-                        <i className='fa fa-quote-left'></i>
-                      </span>
-                      <p className='rate'>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                        <span className='fa fa-star'></span>
-                      </p>
-                      <p>Far far away, behind the word mountains, far from the countries Vokalia</p>
-                      <p className='name'>Ken Bosh</p>
-                      <span className='position'>Businesswoman</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+              // onClick={() => router.push('/customer-dashboard')}
+            >
+              Login
+            </Button>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Typography variant='body2' sx={{ marginRight: 2 }}>
+                New on our platform?
+              </Typography>
+              <Typography variant='body2'>
+                <Link passHref href='/pages/register'>
+                  <LinkStyled>Create an account</LinkStyled>
+                </Link>
+              </Typography>
+            </Box> */}
+            {/* <Divider sx={{ my: 5 }}>or</Divider>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Facebook sx={{ color: '#497ce2' }} />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Twitter sx={{ color: '#1da1f2' }} />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Github
+                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
+                  />
+                </IconButton>
+              </Link>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Google sx={{ color: '#db4437' }} />
+                </IconButton>
+              </Link>
+            </Box> */}
+          </form>
+        </CardContent>
+      </Card>
+      {onOpen && <ForgotPassword onOpen={onOpen} onClose={() => setOnOpen(false)} />}
+      <FooterIllustrationsV1 />
+    </Box>
   )
 }
+LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default HomePage
+export default LoginPage

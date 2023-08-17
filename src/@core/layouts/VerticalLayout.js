@@ -16,8 +16,6 @@ import themeConfig from 'src/configs/themeConfig'
 import AppBar from './components/vertical/appBar'
 import Navigation from './components/vertical/navigation'
 import Footer from './components/shared-components/footer'
-import Header from './components/shared-components/header'
-
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 // ** Styled Component
@@ -77,23 +75,20 @@ const VerticalLayout = props => {
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* {login && ( */}
         <>
-          {/* <Navigation
+          <Navigation
             navWidth={navWidth}
             navVisible={navVisible}
             setNavVisible={setNavVisible}
             toggleNavVisibility={toggleNavVisibility}
             {...props}
-          /> */}
+          />
           <MainContentWrapper className='layout-content-wrapper'>
-            {/* <AppBar toggleNavVisibility={toggleNavVisibility} {...props} /> */}
-
-            <Header {...props} />
+            <AppBar toggleNavVisibility={toggleNavVisibility} {...props} />
 
             <ContentWrapper
               className='layout-page-content'
               sx={{
                 ...(contentWidth === 'boxed' && {
-                  padding: 0,
                   mx: 'auto',
                   '@media (min-width:1440px)': { maxWidth: 1440 },
                   '@media (min-width:1200px)': { maxWidth: '100%' }
@@ -117,7 +112,7 @@ const VerticalLayout = props => {
         scrollToTop(props)
       ) : (
         <ScrollToTop className='mui-fixed'>
-          <Fab color='primary' style={{ backgroundColor: '#fd645b' }} size='small' aria-label='scroll back to top'>
+          <Fab color='primary' size='small' aria-label='scroll back to top'>
             <ArrowUp />
           </Fab>
         </ScrollToTop>
