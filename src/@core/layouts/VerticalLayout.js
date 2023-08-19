@@ -93,6 +93,7 @@ const VerticalLayout = props => {
               className='layout-page-content'
               sx={{
                 ...(contentWidth === 'boxed' && {
+                  padding: 0,
                   mx: 'auto',
                   '@media (min-width:1440px)': { maxWidth: 1440 },
                   '@media (min-width:1200px)': { maxWidth: '100%' }
@@ -116,7 +117,7 @@ const VerticalLayout = props => {
         scrollToTop(props)
       ) : (
         <ScrollToTop className='mui-fixed'>
-          <Fab color='primary' size='small' aria-label='scroll back to top'>
+          <Fab color='primary' style={{ backgroundColor: '#fd645b' }} size='small' aria-label='scroll back to top'>
             <ArrowUp />
           </Fab>
         </ScrollToTop>

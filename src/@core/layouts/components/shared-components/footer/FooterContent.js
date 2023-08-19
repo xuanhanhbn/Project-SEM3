@@ -1,51 +1,150 @@
-// ** MUI Imports
-import Box from '@mui/material/Box'
-import Link from '@mui/material/Link'
-import Typography from '@mui/material/Typography'
-import useMediaQuery from '@mui/material/useMediaQuery'
-
 const FooterContent = () => {
-  // ** Var
-  const hidden = useMediaQuery(theme => theme.breakpoints.down('md'))
-
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
-        <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
-        </Box>
-        {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
-          ThemeSelection
-        </Link>
-      </Typography>
-      {hidden ? null : (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/LICENSE'
-          >
-            MIT License
-          </Link>
-          <Link target='_blank' href='https://themeselection.com/'>
-            More Themes
-          </Link>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/README.md'
-          >
-            Documentation
-          </Link>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues'
-          >
-            Support
-          </Link>
-        </Box>
-      )}
-    </Box>
+    <div>
+      {/* FOOTER */}
+      <footer className='footer'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-6 col-lg-3 mb-4 mb-md-0'>
+              <h2 className='footer-heading'>Unicare.</h2>
+              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              <ul className='ftco-footer-social p-0'>
+                <li className='ftco-animate'>
+                  <a href='#' data-toggle='tooltip' data-placement='top' title='Twitter'>
+                    <span className='fa fa-twitter'></span>
+                  </a>
+                </li>
+                <li className='ftco-animate'>
+                  <a href='#' data-toggle='tooltip' data-placement='top' title='Facebook'>
+                    <span className='fa fa-facebook'></span>
+                  </a>
+                </li>
+                <li className='ftco-animate'>
+                  <a href='#' data-toggle='tooltip' data-placement='top' title='Instagram'>
+                    <span className='fa fa-instagram'></span>
+                  </a>
+                </li>
+              </ul>
+              <p>
+                <a href='#' className='btn btn-quarternary'>
+                  Donate Now
+                </a>
+              </p>
+            </div>
+            <div className='col-md-6 col-lg-3 mb-4 mb-md-0'>
+              <h2 className='footer-heading'>Latest News</h2>
+              <div className='block-21 mb-4 d-flex'>
+                <a className='img mr-4 rounded' style={{ backgroundImage: ' url(images/image_1.jpg)' }}></a>
+                <div className='text'>
+                  <h3 className='heading'>
+                    <a href='#'>Even the all-powerful Pointing has no control about</a>
+                  </h3>
+                  <div className='meta'>
+                    <div>
+                      <a href='#'>Jul 20, 2020</a>
+                    </div>
+                    <div>
+                      <a href='#'>Admin</a>
+                    </div>
+                    <div>
+                      <a href='#'>19</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='block-21 mb-4 d-flex'>
+                <a className='img mr-4 rounded' style={{ backgroundImage: ' url(images/image_2.jpg)' }}></a>
+                <div className='text'>
+                  <h3 className='heading'>
+                    <a href='#'>Even the all-powerful Pointing has no control about</a>
+                  </h3>
+                  <div className='meta'>
+                    <div>
+                      <a href='#'>Jul 20, 2020</a>
+                    </div>
+                    <div>
+                      <a href='#'>Admin</a>
+                    </div>
+                    <div>
+                      <a href='#'>19</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='col-md-6 col-lg-3 pl-lg-5 mb-4 mb-md-0'>
+              <h2 className='footer-heading'>Quick Links</h2>
+              <ul className='list-unstyled'>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    Causes
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    New Campaigns
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='py-2 d-block'>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className='col-md-6 col-lg-3 mb-4 mb-md-0'>
+              <h2 className='footer-heading'>Have a Questions?</h2>
+              <div className='block-23 mb-3'>
+                <ul>
+                  <li>
+                    <span className='icon fa fa-map'></span>
+                    <span className='text'>203 Fake St. Mountain View, San Francisco, California, USA</span>
+                  </li>
+                  <li>
+                    <a href='#'>
+                      <span className='icon fa fa-phone'></span>
+                      <span className='text'>+2 392 3929 210</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href='#'>
+                      <span className='icon fa fa-paper-plane'></span>
+                      <span className='text'>info@yourdomain.com</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className='row mt-5'>
+            <div className='col-md-12 text-center'>
+              <p className='copyright'>
+                Copyright &copy;All rights reserved | This template is made with
+                <i className='fa fa-heart' aria-hidden='true'></i> by
+                <a href='https://colorlib.com' target='_blank' rel='noreferrer'>
+                  Colorlib.com
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   )
 }
 
