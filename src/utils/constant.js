@@ -1,1 +1,1 @@
-export const baseApiUrlGateway = 'https://wdabckd.azurewebsites.net/api'
+export const baseApiUrlGateway = 'https://eproject3.azurewebsites.net/api'

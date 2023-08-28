@@ -33,6 +33,11 @@ const navigation = () => {
       role: ['Admin']
     },
     {
+      sectionTitle: 'About Us',
+      isShowMenu: true,
+      role: ['Admin']
+    },
+    {
       title: 'AboutUs',
       icon: HomeOutline,
       path: '/about-us',
@@ -44,6 +49,30 @@ const navigation = () => {
       icon: HomeOutline,
       path: '/about-us/form-create',
       isShowMenu: false,
+      role: ['Admin']
+    },
+    {
+      sectionTitle: 'Partner',
+      isShowMenu: true,
+      role: ['Admin']
+    },
+    {
+      title: 'Partners List',
+      icon: HomeOutline,
+      path: '/partners-listing',
+      isShowMenu: true,
+      role: ['Admin']
+    },
+    {
+      sectionTitle: 'Program',
+      isShowMenu: true,
+      role: ['Admin']
+    },
+    {
+      title: 'Program List',
+      icon: HomeOutline,
+      path: '/program',
+      isShowMenu: true,
       role: ['Admin']
     }
   ]

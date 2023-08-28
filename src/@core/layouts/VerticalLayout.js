@@ -53,8 +53,6 @@ const VerticalLayout = props => {
   // ** Props
   const { settings, children, scrollToTop, verticalNavItems } = props
 
-  const [login, setLogin] = useState()
-
   // ** Vars
   const { contentWidth } = settings
   const navWidth = themeConfig.navigationSize

@@ -105,19 +105,16 @@ const LoginPage = () => {
 
       handleShowSnackbar('Login Success')
       localStorage.setItem('loginPage', JSON.stringify(dataLogin))
+      router.push('/admin/dashboard')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin])
 
-  // useEffect(() => {
-  //   if (dataUser && Object.keys(dataUser).length) {
-  //     if (dataUser?.roles?.toString() === 'Admin') {
-  //       router.push('/admin/dashboard')
-  //     } else {
-  //       router.push('/customer-dashboard')
-  //     }
-  //   }
-  // }, [dataUser])
+  useEffect(() => {
+    if (dataUser && Object.keys(dataUser).length) {
+      router.push('/admin/dashboard')
+    }
+  }, [dataUser])
 
   // Xử lí khi đăng nhập thất bại
   useEffect(() => {
@@ -282,9 +279,7 @@ const LoginPage = () => {
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/admin/dashboard')}
-
-              // onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit)}
             >
               Login
             </Button>
