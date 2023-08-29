@@ -10,12 +10,16 @@ import { columns } from './constant'
 import { makeSelectProgram, programActions } from './slice'
 import { useSnackbar } from 'notistack'
 import ModalCreate from './components/ModalCreate'
+import { makeSelectPartner, partnerActions } from '../partners-listing/slice'
 
 function ProgramList() {
   const dispatch = useDispatch()
   const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Program List' }]
   const globalDataProgram = useSelector(makeSelectProgram)
   const { isLoading, isSuccess, isError } = globalDataProgram
+  const globalDataPartner = useSelector(makeSelectPartner)
+  const dataPartner = globalDataPartner?.dataList || []
+  const { isUploadImage } = globalDataPartner
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
@@ -26,6 +30,7 @@ function ProgramList() {
   // Call api khi lần đầu vào trang
   useEffect(() => {
     dispatch(programActions.onGetListProgram())
+    dispatch(partnerActions.onGetListPartner())
   }, [])
 
   // Call api khi xoá partner
@@ -114,7 +119,12 @@ function ProgramList() {
         )}
 
         {isOpenModalCreate && (
-          <ModalCreate isOpenModalCreate={isOpenModalCreate} onCancel={() => setIsOpenModalCreate(false)} />
+          <ModalCreate
+            dataPartner={dataPartner}
+            isUploadImage={isUploadImage}
+            isOpenModalCreate={isOpenModalCreate}
+            onCancel={() => setIsOpenModalCreate(false)}
+          />
         )}
       </div>
     </div>

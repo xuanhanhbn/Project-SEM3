@@ -14,25 +14,25 @@ import { styled } from '@mui/material/styles'
 import { message, Upload } from 'antd'
 import { baseApiUrlGateway } from 'src/utils/constant'
 import { useDispatch, useSelector } from 'react-redux'
-import { makeSelectPartner, partnerActions } from '../../slice'
+import { makeSelectPartner, makeSelectProgram } from '../../slice'
 import { useSnackbar } from 'notistack'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import Creatable from 'react-select/creatable'
+import Select from 'react-select'
+import { ButtonStyled } from 'src/components/ButtonStyled'
+import { partnerActions } from 'src/pages/partners-listing/slice'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Full name is required'),
-  email: Yup.string().required('Email is required').email('Email is invalid.'),
+  partnerId: Yup.string().required('Partner is required'),
+  donationInfo: Yup.string().required('donationInfo is required'),
+  target: Yup.string().required('target is required'),
+  endDate: Yup.string().required('endDate is required'),
+  donationReason: Yup.string().required('donationReason is required'),
   description: Yup.string().required('description is required')
 
   // partnerThumbnail: Yup.mixed().required('Partner Thumbnail is required')
 })
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center'
-  }
-}))
 
 const categoryStyles = {
   control: (provided, state) => ({
@@ -41,17 +41,19 @@ const categoryStyles = {
   })
 }
 function ModalCreate(props) {
-  const { isOpenModalCreate, handleCreatePartner, onCancel } = props
+  const { isOpenModalCreate, handleCreatePartner, onCancel, dataPartner, isUploadImage } = props
   const { TextArea } = Input
   const { RangePicker } = DatePicker
 
   const [fileList, setFileList] = useState([])
-  const [uploading, setUploading] = useState(false)
   const [isErrorFile, setIsErrorFile] = useState('')
   const [imgSrc, setImgSrc] = useState('')
-  const [valueCategory, setValueCategory] = useState({})
-
+  const [selectedOptions, setSelectedOptions] = useState([])
   const dispatch = useDispatch()
+  const option = []
+
+  const globalDataProgram = useSelector(makeSelectProgram)
+  const { isLoading } = globalDataProgram
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
@@ -67,11 +69,7 @@ function ModalCreate(props) {
     resolver: yupResolver(validationSchema)
   })
 
-  // const globalDataPartner = useSelector(makeSelectPartner)
-  // const { isLoading, isUploadImage } = globalDataPartner
-
   const onSubmit = data => {
-    console.log('fileList: ', fileList)
     if (fileList.length <= 0) {
       return setIsErrorFile('Partner Thumbnail is required')
     }
@@ -85,13 +83,13 @@ function ModalCreate(props) {
     }
   }
 
-  // useEffect(() => {
-  //   if (isUploadImage) {
-  //     dispatch(partnerActions.clear())
+  useEffect(() => {
+    if (isUploadImage) {
+      dispatch(partnerActions.clear())
 
-  //     return handleShowSnackbar('Upload Image Success')
-  //   }
-  // }, [isUploadImage])
+      return handleShowSnackbar('Upload Image Success')
+    }
+  }, [isUploadImage])
 
   const onUploadImage = file => {
     const reader = new FileReader()
@@ -108,10 +106,34 @@ function ModalCreate(props) {
     }
   }
 
+  const handleSelectChangePartner = selectedOption => {
+    setValue('partnerId', selectedOption?.value, { shouldValidate: true })
+  }
+
+  // SELECT_REASON
   const handleSelectChange = selectedOption => {
-    const selectedValue = selectedOption
-    setValue('donationReason', selectedValue?.label, { shouldValidate: true })
-    setValueCategory(selectedValue)
+    // setValue('donationReason', selectedValue?.label, { shouldValidate: true })
+    // setValueCategory(selectedValue)
+    if (selectedOption) {
+      // Kiểm tra xem lựa chọn đã tồn tại trong mảng hay chưa
+      if (!selectedOptions.includes(selectedOption.value)) {
+        const newOptions = selectedOption?.map(item => ({
+          label: item.label,
+          value: item.value
+        }))
+
+        return setSelectedOptions([...newOptions])
+      }
+    }
+  }
+
+  const handleGetOptionsPartner = () => {
+    const formattedOptions = dataPartner?.map(item => ({
+      value: item?.partnerId,
+      label: item?.name
+    }))
+
+    return formattedOptions
   }
 
   const renderDefaultInput = item => {
@@ -256,10 +278,10 @@ function ModalCreate(props) {
                 <>
                   <Creatable
                     {...field}
+                    options={selectedOptions || []}
+                    isMulti
+                    placeholder='Select Reason'
                     onChange={handleSelectChange}
-                    // options={handleGetOptions()}
-
-                    value={valueCategory}
                     isSearchable
                     isClearable
                     className='z-2'
@@ -275,27 +297,42 @@ function ModalCreate(props) {
         </div>
       )
     }
+    if (item.type === 'SELECT_PARTNER') {
+      const { field } = item
+      const message = errors[field] && errors[field].message
 
-    if (item.type === 'SELECT') {
       return (
         <div key={item.field}>
-          {/* <Controller
+          <Controller
             control={control}
             render={({ field }) => {
               return (
-                <Upload {...propsUpload} style={{ marginBottom: 10 }}>
-                  <Button variant='outlined' size='large' onClick={handleUpload}>
-                    <UploadOutlined />
-                    <div style={{ marginLeft: 10 }}>Select File</div>
-                  </Button>
-                </Upload>
+                <>
+                  <Select
+                    {...field}
+                    onChange={handleSelectChangePartner}
+                    placeholder='Select Partner'
+                    options={handleGetOptionsPartner()}
+                    getOptionLabel={option => option.label}
+                    getOptionValue={option => option.value}
+                    className='z-2'
+                    styles={categoryStyles}
+                  />
+                </>
               )
             }}
             name={item.field}
-          /> */}
+          />
 
+          <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
+        </div>
+      )
+    }
+    if (item.type === 'SELECT') {
+      return (
+        <div key={item.field}>
           <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-            {/* {isLoading ? <Spin /> : 'Upload New Photo'} */}
+            {isLoading ? <Spin /> : 'Upload New Photo'}
             <input
               hidden
               type='file'
