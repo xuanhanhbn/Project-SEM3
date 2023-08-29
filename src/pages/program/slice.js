@@ -6,7 +6,9 @@ const initialState = {
   isSuccess: false,
   isError: false,
   isCreate: false,
-  dataList: []
+  isUploadImage: false,
+  dataList: [],
+  dataImage: {}
 }
 
 const programList = createSlice({
@@ -26,6 +28,34 @@ const programList = createSlice({
       state.isSuccess = true
       state.dataList = action.payload || []
     },
+
+    onUploadImageProgram(state) {
+      state.isLoading = true
+    },
+    onUploadImageProgramFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onUploadImageProgramSuccess(state, action) {
+      state.isLoading = false
+      state.isUploadImage = true
+      state.dataImage = action.payload || {}
+    },
+
+    onCreateProgram(state) {
+      state.isLoading = true
+    },
+    onCreateProgramFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onCreateProgramSuccess(state, action) {
+      state.isLoading = false
+      state.isCreate = true
+    },
+
     onRemoveProgram(state) {
       state.isLoading = true
     },
@@ -44,6 +74,8 @@ const programList = createSlice({
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
+      state.isUploadImage = false
+      state.isCreate = false
     }
   }
 })

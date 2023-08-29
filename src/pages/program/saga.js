@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import { getApiDefault, postApiDefault } from './api'
 import { programActions } from './slice'
 
-// Get List Partner
+// Get List Program
 function* onGetList() {
   const url = '/Program?page=0&size=10'
   try {
@@ -14,6 +14,38 @@ function* onGetList() {
     }
   } catch (error) {
     yield put(programActions.onGetListProgramFailed('internet'))
+  }
+}
+
+// Create List Program
+function* onCreateProgram(data) {
+  const payload = data?.payload || {}
+  const url = '/Program/create'
+  try {
+    const response = yield call(postApiDefault, url, payload)
+    if (response && response.data && response.status === 200) {
+      yield put(programActions.onCreateProgramSuccess(response.data))
+    } else {
+      yield put(programActions.onCreateProgramFailed())
+    }
+  } catch (error) {
+    yield put(programActions.onCreateProgramFailed('internet'))
+  }
+}
+
+// Upload image Program
+function* onUploadImage(data) {
+  const payload = data?.payload
+  const url = '/Attachment'
+  try {
+    const response = yield call(postApiDefault, url, payload)
+    if (response && response.status === 200) {
+      yield put(programActions.onUploadImageProgramSuccess(response.data))
+    } else {
+      yield put(programActions.onUploadImageProgramFailed())
+    }
+  } catch (error) {
+    yield put(programActions.onUploadImageProgramFailed('internet'))
   }
 }
 
@@ -36,4 +68,6 @@ function* onRemove(data) {
 export default function* programSaga() {
   yield takeLatest(programActions.onRemoveProgram, onRemove)
   yield takeLatest(programActions.onGetListProgram, onGetList)
+  yield takeLatest(programActions.onUploadImageProgram, onUploadImage)
+  yield takeLatest(programActions.onCreateProgram, onCreateProgram)
 }
