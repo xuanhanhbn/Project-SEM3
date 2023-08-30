@@ -39,14 +39,14 @@ function ProgramList() {
   }
 
   // Xử lí khi xoá thành công
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(programActions.clear())
-      setIsOpenModalDelete(false)
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     dispatch(programActions.clear())
+  //     setIsOpenModalDelete(false)
 
-      return handleShowSnackbar('Success')
-    }
-  }, [isSuccess])
+  //     // return handleShowSnackbar('Success')
+  //   }
+  // }, [isSuccess])
 
   // Xử lí khi xoá thất bại
   useEffect(() => {

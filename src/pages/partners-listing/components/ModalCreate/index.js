@@ -93,6 +93,7 @@ function ModalCreate(props) {
     const reader = new FileReader()
 
     const { files } = file.target
+    console.log('files: ', files)
     if (files && files.length !== 0) {
       const blobFromFile = new Blob([], { type: 'image/jpeg' })
       const formData = new FormData()
