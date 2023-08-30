@@ -1,0 +1,9 @@
+.MuiInput-underline::before {
+
+    border-bottom: 1px solid transparent !important;
+}
+
+
+.MuiInput-underline.Mui-disabled::before {
+    border-bottom-style: none;
+}

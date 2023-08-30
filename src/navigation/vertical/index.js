@@ -64,6 +64,13 @@ const navigation = () => {
       role: ['Admin']
     },
     {
+      title: 'Partner Detail',
+      icon: HomeOutline,
+      path: '/partners-listing/partner-detail',
+      isShowMenu: false,
+      role: ['Admin']
+    },
+    {
       sectionTitle: 'Program',
       isShowMenu: true,
       role: ['Admin']
