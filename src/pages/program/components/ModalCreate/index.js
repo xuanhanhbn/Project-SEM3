@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DatePicker, Modal, Spin, Typography } from 'antd'
+import { DatePicker, Modal, Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { inputCreateProgram } from '../../constant'
-import { TextField, FormControl, OutlinedInput, InputAdornment, InputLabel } from '@mui/material'
+import { OutlinedInput, InputAdornment } from '@mui/material'
+
 import { Input } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeSelectPartner, makeSelectProgram, programActions } from '../../slice'
@@ -19,6 +20,17 @@ import { partnerActions } from 'src/pages/partners-listing/slice'
 import moment from 'moment'
 import { Upload } from 'antd'
 import { beforeUpload, getBase64 } from 'src/utils/common'
+
+import Grid from '@mui/material/Grid'
+
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import InputLabel from '@mui/material/InputLabel'
+
+import CardContent from '@mui/material/CardContent'
+import FormControl from '@mui/material/FormControl'
+
+import Button from '@mui/material/Button'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Full name is required'),
@@ -181,23 +193,26 @@ function ModalCreate(props) {
         const message = errors[field] && errors[field].message
 
         return (
-          <div key={item.field}>
+          <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => {
                 return (
                   <>
-                    <OutlinedInput
-                      fullWidth
-                      placeholder={item.label}
-                      label={item.label}
-                      id='outlined-adornment-amount'
-                      required
-                      name={item.field}
-                      onChange={onChange}
-                      value={value}
-                      endAdornment={<InputAdornment position='start'>$</InputAdornment>}
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor='outlined-adornment'>Target</InputLabel>
+                      <OutlinedInput
+                        fullWidth
+                        placeholder={item.label}
+                        label='Target'
+                        id='outlined-adornment-amount'
+                        required
+                        name={item.field}
+                        onChange={onChange}
+                        value={value}
+                        endAdornment={<InputAdornment position='start'>$</InputAdornment>}
+                      />
+                    </FormControl>
                   </>
                 )
               }}
@@ -205,14 +220,14 @@ function ModalCreate(props) {
             />
 
             <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-          </div>
+          </Grid>
         )
       }
       const { field } = item
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -236,7 +251,7 @@ function ModalCreate(props) {
           />
 
           <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-        </div>
+        </Grid>
       )
     }
     if (item.type === 'TEXT_AREA') {
@@ -244,7 +259,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -269,7 +284,7 @@ function ModalCreate(props) {
           />
 
           <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-        </div>
+        </Grid>
       )
     }
     if (item.type === 'SELECT_DATE') {
@@ -277,13 +292,14 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
               return (
                 <DatePickerWrapper style={{ height: 53 }}>
                   <DatePicker
+                    showToday={false}
                     onChange={onChange}
                     disabledDate={disabledDate}
                     className='d-flex'
@@ -300,7 +316,7 @@ function ModalCreate(props) {
           />
 
           <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-        </div>
+        </Grid>
       )
     }
     if (item.type === 'SELECT_REASON') {
@@ -308,7 +324,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -335,7 +351,7 @@ function ModalCreate(props) {
           />
 
           <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-        </div>
+        </Grid>
       )
     }
     if (item.type === 'SELECT_PARTNER') {
@@ -343,7 +359,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -367,7 +383,7 @@ function ModalCreate(props) {
           />
 
           <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>
-        </div>
+        </Grid>
       )
     }
     if (item.type === 'SELECT') {
@@ -375,7 +391,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -392,7 +408,7 @@ function ModalCreate(props) {
                 >
                   <ButtonStyled variant='outlined' size='large'>
                     <UploadOutlined />
-                    <div style={{ marginLeft: 10 }}>Select Image</div>
+                    <div style={{ marginLeft: 10 }}> Image</div>
                   </ButtonStyled>
                 </Upload>
               )
@@ -417,15 +433,25 @@ function ModalCreate(props) {
           <Typography style={{ marginTop: 0, marginBottom: 10 }}>
             {imgSrc && !isLoading ? 'Upload 1 image' : ''}
           </Typography> */}
-        </div>
+        </Grid>
       )
     }
   }
 
   return (
     <div>
-      <Modal title='Create Program' open={isOpenModalCreate} onOk={handleSubmit(onSubmit)} onCancel={onCancel}>
-        <div>{inputCreateProgram.map(item => renderDefaultInput(item))}</div>
+      <Modal
+        style={{ top: 20 }}
+        title='Create Program'
+        open={isOpenModalCreate}
+        onOk={handleSubmit(onSubmit)}
+        onCancel={onCancel}
+      >
+        <CardContent>
+          <Grid container spacing={7}>
+            {inputCreateProgram.map(item => renderDefaultInput(item))}
+          </Grid>
+        </CardContent>
       </Modal>
     </div>
   )
