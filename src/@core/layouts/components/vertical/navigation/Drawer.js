@@ -54,7 +54,8 @@ const Drawer = props => {
         width: navWidth,
         '& .MuiDrawer-paper': {
           borderRight: 0,
-          backgroundColor: theme.palette.background.default
+          backgroundColor: theme.palette.background.default,
+          zIndex: 1
         }
       }}
     >

@@ -251,24 +251,7 @@ const TabAccount = props => {
           </Grid>
           {inputTabAccount.map(item => renderDefaultFilter(item))}
 
-          {/* {openAlert ? (
-            <Grid item xs={12} sx={{ mb: 3 }}>
-              <Alert
-                severity='warning'
-                sx={{ '& a': { fontWeight: 400 } }}
-                action={
-                  <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
-                    <Close fontSize='inherit' />
-                  </IconButton>
-                }
-              >
-                <AlertTitle>Your email is not confirmed. Please check your inbox.</AlertTitle>
-                <Link href='/' onClick={e => e.preventDefault()}>
-                  Resend Confirmation
-                </Link>
-              </Alert>
-            </Grid>
-          ) : null} */}
+        
 
           <Grid item xs={12}>
             <Button variant='contained' type='submit' sx={{ marginRight: 3.5 }}>
