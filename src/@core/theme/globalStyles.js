@@ -36,6 +36,9 @@ const GlobalStyles = theme => {
         position: 'fixed',
         backgroundColor: theme.palette.primary.main
       }
+    },
+    '.css-4vn2z8-MuiDrawer-docked': {
+      zIndex: 1
     }
   }
 }
