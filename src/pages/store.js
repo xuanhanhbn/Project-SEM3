@@ -29,6 +29,10 @@ import partnerReducer from './partners-listing/slice'
 import programSaga from './program/saga'
 import programReducer from './program/slice'
 
+// PAGE
+import pageSaga from './page-list/saga'
+import pageReducer from './page-list/slice'
+
 // registry reducer
 const reducers = combineReducers({
   login: loginReducer,
@@ -36,12 +40,13 @@ const reducers = combineReducers({
   dashboard: dashboardReducer,
   about: aboutReducer,
   partner: partnerReducer,
-  program: programReducer
+  program: programReducer,
+  page: pageReducer
 })
 
 // registry sagas
 function* rootSaga() {
-  yield all([loginSaga(), accountSettingSaga(), dashboardSaga(), aboutSaga(), partnerSaga(), programSaga()])
+  yield all([loginSaga(), accountSettingSaga(), dashboardSaga(), aboutSaga(), partnerSaga(), programSaga(), pageSaga()])
 }
 
 // const persistConfig = {
