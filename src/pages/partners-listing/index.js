@@ -11,6 +11,7 @@ import { useSnackbar } from 'notistack'
 import Loading from 'src/components/Loading'
 import ModalCreate from './components/ModalCreate'
 import moment from 'moment'
+import Link from 'next/link'
 
 function PartnerList() {
   const dispatch = useDispatch()
@@ -27,6 +28,8 @@ function PartnerList() {
   useEffect(() => {
     dispatch(partnerActions.onGetListPartner())
   }, [])
+
+  console.log('globalDataPartner', globalDataPartner)
 
   // Call api khi xoá partner
   const handleDeletePartners = () => {
@@ -60,9 +63,18 @@ function PartnerList() {
     if (field === 'actions') {
       return (
         <div className='d-flex justify-content-center'>
-          <Button>
-            <EyeOutline />
-          </Button>
+          <Link
+            passHref
+            href={{
+              pathname: `/partners-listing/partner-detail/`,
+              query: { ...item, type: 'not' }
+            }}
+          >
+            <Button>
+              <EyeOutline />
+            </Button>
+          </Link>
+
           <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
           </Button>

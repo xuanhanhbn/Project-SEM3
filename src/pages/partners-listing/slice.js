@@ -9,7 +9,11 @@ const initialState = {
   isCreate: false,
   isUploadImage: false,
   dataList: [],
-  dataImage: {}
+  dataImage: {},
+  dataDetail: {},
+  isUpdateSuccess: false,
+  isChangeImage: false,
+  dataChangeImage:{}
 }
 
 const partnerListing = createSlice({
@@ -28,6 +32,33 @@ const partnerListing = createSlice({
       state.isLoading = false
       state.isSuccess = true
       state.dataList = action.payload || []
+    },
+
+    onGetListDetailPartner(state) {
+      state.isLoading = true
+    },
+    onGetListDetailPartnerFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onGetListDetailPartnerSuccess(state, action) {
+      state.isLoading = false
+      state.dataDetail = action.payload || {}
+      state.isSuccess = true
+    },
+
+    onUpdateDetailPartner(state) {
+      state.isLoading = true
+    },
+    onUpdateDetailPartnerFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onUpdateDetailPartnerSuccess(state, action) {
+      state.isLoading = false
+      state.isUpdateSuccess = true
     },
 
     onCreatePartner(state) {
@@ -55,6 +86,20 @@ const partnerListing = createSlice({
       state.isLoading = false
       state.isUploadImage = true
       state.dataImage = action.payload || {}
+    },
+
+    onChangeImagePartner(state) {
+      state.isLoading = true
+    },
+    onChangeImagePartnerFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onChangeImagePartnerSuccess(state, action) {
+      state.isLoading = false
+      state.isChangeImage = true
+      state.dataChangeImage = action.payload || {}
     },
 
     onRemovePartner(state) {
