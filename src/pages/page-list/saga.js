@@ -23,6 +23,7 @@ function* onCreate(data) {
   const url = '/Document'
   try {
     const response = yield call(postApiDefault, url, payload)
+    console.log('response: ', response)
     if (response && response.status === 200) {
       yield put(pageListActions.onCreatePageSuccess(response.data))
     } else {
