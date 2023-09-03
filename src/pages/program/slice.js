@@ -28,6 +28,19 @@ const programList = createSlice({
       state.isSuccess = true
       state.dataList = action.payload || []
     },
+    onGetDetailProgram(state) {
+      state.isLoading = true
+    },
+    onGetDetailProgramFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+    },
+    onGetDetailProgramSuccess(state, action) {
+      state.isLoading = false
+      state.isSuccess = true
+      state.dataDetail = action.payload || []
+    },
 
     onUploadImageProgram(state) {
       state.isLoading = true

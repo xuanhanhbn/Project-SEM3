@@ -33,21 +33,21 @@ const navigation = () => {
       role: ['Admin']
     },
     {
-      sectionTitle: 'About Us',
+      sectionTitle: 'Page List',
       isShowMenu: true,
       role: ['Admin']
     },
     {
-      title: 'AboutUs',
+      title: 'Page List',
       icon: HomeOutline,
-      path: '/about-us',
+      path: '/page-list',
       isShowMenu: true,
       role: ['Admin']
     },
     {
-      title: 'Create AboutUs',
+      title: 'Create Page',
       icon: HomeOutline,
-      path: '/about-us/form-create',
+      path: '/page-list/components/form-create',
       isShowMenu: false,
       role: ['Admin']
     },
@@ -81,8 +81,35 @@ const navigation = () => {
       path: '/program',
       isShowMenu: true,
       role: ['Admin']
+    },
+    {
+      title: 'Program Detail',
+      icon: HomeOutline,
+      path: '/program/program-detail',
+      isShowMenu: false,
+      role: ['Admin']
     }
   ]
 }
 
 export default navigation
+
+// {
+//   sectionTitle: 'About Us',
+//   isShowMenu: true,
+//   role: ['Admin']
+// },
+// {
+//   title: 'AboutUs',
+//   icon: HomeOutline,
+//   path: '/about-us',
+//   isShowMenu: true,
+//   role: ['Admin']
+// },
+// {
+//   title: 'Create AboutUs',
+//   icon: HomeOutline,
+//   path: '/about-us/form-create',
+//   isShowMenu: false,
+//   role: ['Admin']
+// },

@@ -193,7 +193,7 @@ function ModalCreate(props) {
         const message = errors[field] && errors[field].message
 
         return (
-          <Grid item xs={12} sm={6} key={item.field}>
+          <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => {
@@ -227,7 +227,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12} sm={6} key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -259,7 +259,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -292,7 +292,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12} sm={6} key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -324,7 +324,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12} sm={6} key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -359,7 +359,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12} sm={6} key={item.field}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12} sm={6} key={item.field}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -391,7 +391,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <Grid item xs={12}>
+        <Grid style={{ paddingTop: '1rem' }} item xs={12}>
           <Controller
             control={control}
             render={({ field }) => {
