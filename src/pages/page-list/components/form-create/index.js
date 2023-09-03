@@ -5,17 +5,14 @@ import 'suneditor/dist/css/suneditor.min.css' // Import Sun Editor's CSS File
 import katex from 'katex'
 import { Controller, useForm } from 'react-hook-form'
 import Button from '@mui/material/Button'
-import { createDocs, inputCreateTypePartner, inputCreateTypeProgram, pageType, roleCategory } from './constant'
+import { inputCreateTypeAbout, inputCreateTypePartner, inputCreateTypeProgram, pageType } from './constant'
 import { InputLabel, TextField, Typography } from '@mui/material'
 import { Breadcrumb, Input } from 'antd'
 import MenuItem from '@mui/material/MenuItem'
 import Grid from '@mui/material/Grid'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import Chip from '@mui/material/Chip'
 import { useTheme } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import OutlinedInput from '@mui/material/OutlinedInput'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -29,13 +26,15 @@ import { makeSelectProgram, programActions } from 'src/pages/program/slice'
 
 const validationSchema = Yup.object().shape({
   pageType: Yup.string().required('Page Type is required'),
-  partnerId: Yup.string().when('pageType', {
-    is: 1,
-    then: Yup.string().required('partnerId is required for')
+  partnerId: Yup.string().when('pageType', (pageType, schema) => {
+    if (pageType.toString() === '1') return schema.required('Must choose Partner')
+
+    return schema
   }),
-  programId: Yup.string().when('pageType', {
-    is: 2,
-    then: Yup.string().required('partnerId is required for')
+  programId: Yup.string().when('pageType', (pageType, schema) => {
+    if (pageType.toString() === '2') return schema.required('Must choose Program')
+
+    return schema
   }),
   content: Yup.string().required('Content is required')
 })
@@ -98,7 +97,7 @@ function CreatePageList() {
 
   // Lay DATA Details
   const globalDataPageList = useSelector(makeSelectPageList)
-  const { isLoading, isError, isSuccess } = globalDataPageList
+  const { isLoading, isCreate, isCreateError } = globalDataPageList
 
   // Get DATA Partner
   const globalDataPartner = useSelector(makeSelectPartner)
@@ -110,20 +109,19 @@ function CreatePageList() {
 
   // Xử lí khi có lỗi
   useEffect(() => {
-    if (isError) {
+    if (isCreateError) {
       dispatch(pageListActions.clear())
-      console.log('isError')
+      handleShowSnackbar('An error occurred, please try again.', 'error')
     }
-  }, [isError])
+  }, [isCreateError])
 
   // Xử lí khi thành công
   useEffect(() => {
-    if (isSuccess) {
+    if (isCreate) {
       dispatch(pageListActions.clear())
       handleShowSnackbar('Success')
-      console.log('isSuccess')
     }
-  }, [isSuccess])
+  }, [isCreate])
 
   // Call API lấy danh sách partner và program
   useEffect(() => {
@@ -219,6 +217,8 @@ function CreatePageList() {
     if (dataRequest.pageType === 2) {
       return inputCreateTypeProgram.map(item => renderDefaultInputProgram(item))
     }
+
+    return inputCreateTypeAbout.map(item => renderDefaultInputAbout(item))
   }
 
   // Render INPUT Khi TYPE === Partner
@@ -378,9 +378,46 @@ function CreatePageList() {
     }
   }
 
+  // RENDER INPUT KHI TYPE === AboutUS
+  const renderDefaultInputAbout = item => {
+    if (item.type === 'SUNEDITOR') {
+      const { field } = item
+      const message = errors[field] && errors[field].message
+
+      return (
+        <Grid item xs={12} sm={6}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <>
+                  <FormControl fullWidth className='mt-4'>
+                    <InputLabel id='demo-simple-select-label'>{item.label}</InputLabel>
+                    <SunEditor
+                      setOptions={editorOptions}
+                      onChange={value => handleUpdateDataRequest(value, { field: 'content' })}
+                      setContents={dataRequest.content}
+                    />
+                    <Typography className='text-danger mt-2'>{message}</Typography>
+                  </FormControl>
+                </>
+              )
+            }}
+            name={item.field}
+          />
+        </Grid>
+      )
+    }
+  }
+
   // Xử lí khi submit form
   const onSubmit = data => {
-    console.log('dataSUBMIT: ', data)
+    // console.log('dataSUBMIT: ', data)
+    const newDataRequest = {
+      ...data,
+      pageType: Number(data.pageType)
+    }
+    dispatch(pageListActions.onCreatePage(newDataRequest))
   }
 
   return (
@@ -417,7 +454,7 @@ function CreatePageList() {
           }}
           name='pageType'
         />
-        {dataRequest && dataRequest.pageType !== null} {renderDefaultFilter()}
+        {dataRequest && dataRequest.pageType !== null && renderDefaultFilter()}
         <div className='d-flex align-items-center justify-content-end'>
           <Button
             type='submit'

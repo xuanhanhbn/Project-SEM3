@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { Breadcrumb } from 'antd'
@@ -16,7 +17,7 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
-import { DoneOutline, EditOutlined } from '@material-ui/icons'
+// import { DoneOutline, EditOutlined } from '@material-ui/icons'
 import Card from '@mui/material/Card'
 import { Input } from 'antd'
 import { columns } from './contants'
@@ -26,6 +27,7 @@ import { useRouter } from 'next/router'
 import { partnerActions, makeSelectPartner } from '../slice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
+import moment from 'moment'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -100,17 +102,17 @@ function PartnerDetail() {
 
   const globalDataPartner = useSelector(makeSelectPartner)
   const partnerDetail = globalDataPartner?.dataDetail
+  const isLoading = globalDataPartner?.isLoading
+  const dataProgramByPartner = partnerDetail?.programs || []
 
   //get data
   useEffect(() => {
-    dispatch(partnerActions.onGetListDetailPartner(globalData))
-  }, [])
+    if (globalData && Object.keys(globalData).length) dispatch(partnerActions.onGetListDetailPartner(globalData))
+  }, [globalData])
 
   // console.log('globalData', globalData)
   // console.log('globalDataPartner', globalDataPartner)
-  console.log('partnerDetail', partnerDetail)
-
-  const [imgSrc, setImgSrc] = useState('/images/avatars/R.jpg')
+  // console.log('partnerDetail', partnerDetail)
 
   const [values, setValues] = useState({
     editText: true
@@ -125,7 +127,11 @@ function PartnerDetail() {
     resolver: yupResolver(validationSchema)
   })
 
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Partner List' }, { title: 'Partner Detail' }]
+  const breadcrumbItems = [
+    { title: 'Company Active' },
+    { href: '/partners-listing', title: 'Partner List' },
+    { title: 'Partner Detail' }
+  ]
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -134,6 +140,14 @@ function PartnerDetail() {
   const handleClickEditText = () => {
     setValues({ editText: false })
   }
+
+  useEffect(() => {
+    if (partnerDetail && Object.keys(partnerDetail).length) {
+      setValue('name', partnerDetail?.name)
+      setValue('email', partnerDetail?.email)
+      setValue('description', partnerDetail?.description)
+    }
+  }, [partnerDetail])
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
@@ -178,7 +192,7 @@ function PartnerDetail() {
 
   return (
     <div className='container'>
-      {/* <Loading isLoading={isLoading} /> */}
+      <Loading isLoading={isLoading} />
       <Breadcrumb items={breadcrumbItems} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
@@ -188,7 +202,7 @@ function PartnerDetail() {
             onClick={handleClickEditText}
             onMouseDown={handleMouseDownPassword}
           >
-            Edit <EditOutlined />
+            {/* Edit <EditOutlined /> */}
           </Button>
           <Button
             type='submit'
@@ -196,7 +210,7 @@ function PartnerDetail() {
             variant='contained'
             onMouseDown={handleMouseDownPassword}
           >
-            Save <DoneOutline />
+            {/* Save <DoneOutline /> */}
           </Button>
         </Box>
         <div style={{ width: '100%' }}>
@@ -266,7 +280,7 @@ function PartnerDetail() {
                               onChange={onChange}
                               value={value}
                               disabled={values.editText ? true : false}
-                              defaultValue={partnerDetail.name}
+                              // defaultValue={partnerDetail.name}
                             />
                           )
                         }}
@@ -280,7 +294,7 @@ function PartnerDetail() {
                             <input
                               style={{ border: 'none', backgroundColor: 'transparent', color: 'black' }}
                               disabled={values.editText ? true : false}
-                              defaultValue={partnerDetail.email}
+                              // defaultValue={partnerDetail.email}
                               onChange={onChange}
                               value={value}
                             />
@@ -301,7 +315,7 @@ function PartnerDetail() {
                         return (
                           <TextArea
                             disabled={values.editText ? true : false}
-                            defaultValue={partnerDetail.description}
+                            // defaultValue={partnerDetail.description}
                             onChange={onChange}
                             value={value}
                             style={{
@@ -343,7 +357,7 @@ function PartnerDetail() {
                 {/* table */}
                 <div>
                   <CustomTable
-                    data={[]}
+                    data={dataProgramByPartner || []}
                     columns={columns}
                     parseFunction={parseData}
                     isShowPaging

@@ -4,6 +4,8 @@ const initialState = {
   isLoading: false,
   errorMessage: '',
   isSuccess: false,
+  isCreate: false,
+  isCreateError: false,
   isError: false,
   dataAbout: []
 }
@@ -32,19 +34,21 @@ const pageList = createSlice({
     },
     onCreatePageFailed(state, action) {
       state.isLoading = false
-      state.isError = true
+      state.isCreateError = true
       state.dataError = action.payload || {}
       state.errorMessage = ''
     },
     onCreatePageSuccess(state, action) {
       state.isLoading = false
-      state.isSuccess = true
+      state.isCreate = true
     },
 
     clear(state) {
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
+      state.isCreate = false
+      state.isCreateError = false
     }
   }
 })
