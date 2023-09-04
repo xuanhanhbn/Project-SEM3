@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
-// import { DoneOutline, EditOutlined } from '@material-ui/icons'
 import Card from '@mui/material/Card'
 import { Input } from 'antd'
 import { columns } from './contants'
@@ -28,6 +27,8 @@ import { partnerActions, makeSelectPartner } from '../slice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import moment from 'moment'
+import { Label } from 'mdi-material-ui'
+import { InputLabel } from '@mui/material'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -139,6 +140,7 @@ function PartnerDetail() {
 
   const handleClickEditText = () => {
     setValues({ editText: false })
+    document.getElementById('name').focus()
   }
 
   useEffect(() => {
@@ -202,7 +204,7 @@ function PartnerDetail() {
             onClick={handleClickEditText}
             onMouseDown={handleMouseDownPassword}
           >
-            {/* Edit <EditOutlined /> */}
+            Edit
           </Button>
           <Button
             type='submit'
@@ -210,16 +212,15 @@ function PartnerDetail() {
             variant='contained'
             onMouseDown={handleMouseDownPassword}
           >
-            {/* Save <DoneOutline /> */}
+            Save
           </Button>
         </Box>
         <div style={{ width: '100%' }}>
-          <Card style={{ marginBottom: 30 }}>
+          <Card style={{ marginBottom: 30, marginRight: 10 }}>
             <Grid container spacing={6}>
               <StyledGrid1 item xs={12} md={12} lg={12}>
                 <CardContent
                   style={{
-                    display: 'flex',
                     flexWrap: 'wrap',
                     width: '100%',
                     justifyContent: 'space-between'
@@ -259,76 +260,82 @@ function PartnerDetail() {
                     </Box>
                     <Box
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-evenly',
-                        marginRight: 10
+                        marginRight: 10,
+                        flex: 1,
+                        paddingTop: 14
                       }}
                     >
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                          return (
-                            <input
-                              style={{
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                color: 'black',
-                                fontSize: 24,
-                                fontWeight: 600
-                              }}
-                              onChange={onChange}
-                              value={value}
-                              disabled={values.editText ? true : false}
-                              // defaultValue={partnerDetail.name}
-                            />
-                          )
-                        }}
-                        name='name'
-                      />
+                      <div style={{ display: 'flex', marginBottom: 10 }}>
+                        <InputLabel style={{ marginRight: 15 }}>Name</InputLabel>
+                        <Controller
+                          control={control}
+                          render={({ field: { onChange, value } }) => {
+                            return (
+                              <input
+                                id='name'
+                                style={{
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: 'black',
+                                  fontWeight: 600,
+                                  marginBottom: 10
+                                }}
+                                onChange={onChange}
+                                value={value}
+                                disabled={values.editText ? true : false}
+                              />
+                            )
+                          }}
+                          name='name'
+                        />
+                      </div>
 
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                          return (
-                            <input
-                              style={{ border: 'none', backgroundColor: 'transparent', color: 'black' }}
-                              disabled={values.editText ? true : false}
-                              // defaultValue={partnerDetail.email}
-                              onChange={onChange}
-                              value={value}
-                            />
-                          )
-                        }}
-                        name='email'
-                      />
+                      <div style={{ display: 'flex', marginBottom: 10 }}>
+                        <InputLabel style={{ marginRight: 15 }}>Email</InputLabel>
+                        <Controller
+                          control={control}
+                          render={({ field: { onChange, value } }) => {
+                            return (
+                              <input
+                                style={{
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: 'black',
+                                  fontWeight: 600
+                                }}
+                                disabled={values.editText ? true : false}
+                                onChange={onChange}
+                                value={value}
+                              />
+                            )
+                          }}
+                          name='email'
+                        />
+                      </div>
+                      <div>
+                        <InputLabel style={{ marginBottom: 10 }}>Description</InputLabel>
+
+                        <Controller
+                          control={control}
+                          render={({ field: { onChange, value } }) => {
+                            return (
+                              <TextArea
+                                disabled={values.editText ? true : false}
+                                onChange={onChange}
+                                value={value}
+                                style={{
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: 'black'
+                                }}
+                                autoSize
+                              />
+                            )
+                          }}
+                          name='description'
+                        />
+                      </div>
                     </Box>
-                  </Box>
-                  <Box style={{ paddingTop: 14, flex: 1 }}>
-                    <Typography sx={{ marginTop: 0, marginBottom: 5, color: 'black', fontSize: 24, fontWeight: 600 }}>
-                      Description
-                    </Typography>
-
-                    <Controller
-                      control={control}
-                      render={({ field: { onChange, value } }) => {
-                        return (
-                          <TextArea
-                            disabled={values.editText ? true : false}
-                            // defaultValue={partnerDetail.description}
-                            onChange={onChange}
-                            value={value}
-                            style={{
-                              border: 'none',
-                              backgroundColor: 'transparent',
-                              color: 'black'
-                            }}
-                            autoSize
-                          />
-                        )
-                      }}
-                      name='description'
-                    />
                   </Box>
                 </CardContent>
               </StyledGrid1>
@@ -336,6 +343,7 @@ function PartnerDetail() {
           </Card>
         </div>
       </form>
+
       <div>
         <Card>
           <Grid container spacing={6}>

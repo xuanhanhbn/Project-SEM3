@@ -13,7 +13,6 @@ import ModalCreate from './components/ModalCreate'
 import { makeSelectPartner, partnerActions } from '../partners-listing/slice'
 import Link from 'next/link'
 
-
 function ProgramList() {
   const dispatch = useDispatch()
   const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Program List' }]
@@ -67,9 +66,12 @@ function ProgramList() {
     if (field === 'actions') {
       return (
         <div className='d-flex justify-content-center'>
-          <Button>
-            <EyeOutline />
-          </Button>
+          <Link passHref href='/program/program-detail'>
+            <Button>
+              <EyeOutline />
+            </Button>
+          </Link>
+
           <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
           </Button>
@@ -82,7 +84,8 @@ function ProgramList() {
 
   const fakeData = [
     {
-      partnerName: 'a'
+      partnerName: 'a',
+      status: 'Starting'
     }
   ]
 

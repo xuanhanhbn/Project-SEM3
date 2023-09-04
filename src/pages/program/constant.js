@@ -8,7 +8,12 @@ export const columns = [
   {
     field: 'partnerName',
     maxWidth: 170,
-    name: 'Name Partner'
+    name: 'Name Program'
+  },
+  {
+    field: 'status',
+    maxWidth: 170,
+    name: 'Status'
   },
 
   {

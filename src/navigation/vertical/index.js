@@ -64,6 +64,13 @@ const navigation = () => {
       role: ['Admin']
     },
     {
+      title: 'Partner Detail',
+      icon: HomeOutline,
+      path: '/partners-listing/partner-detail',
+      isShowMenu: false,
+      role: ['Admin']
+    },
+    {
       sectionTitle: 'Program',
       isShowMenu: true,
       role: ['Admin']
@@ -73,6 +80,13 @@ const navigation = () => {
       icon: HomeOutline,
       path: '/program',
       isShowMenu: true,
+      role: ['Admin']
+    },
+    {
+      title: 'Program Detail',
+      icon: HomeOutline,
+      path: '/program/program-detail',
+      isShowMenu: false,
       role: ['Admin']
     }
   ]
