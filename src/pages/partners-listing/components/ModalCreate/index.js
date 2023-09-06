@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Form, Modal, Spin, Typography } from 'antd'
+import { Form, Modal, Spin, Typography, Upload } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,13 +12,14 @@ import { styled } from '@mui/material/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeSelectPartner, partnerActions } from '../../slice'
 import { useSnackbar } from 'notistack'
+import { UploadOutlined } from '@ant-design/icons'
+import { beforeUpload } from 'src/utils/common'
 
 const validationSchema = Yup.object().shape({
+  partnerThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
   name: Yup.string().required('Full name is required'),
   email: Yup.string().required('Email is required').email('Email is invalid.'),
   description: Yup.string().required('description is required')
-
-  // partnerThumbnail: Yup.mixed().required('Partner Thumbnail is required')
 })
 
 const ButtonStyled = styled(Button)(({ theme }) => ({
@@ -31,9 +32,6 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
 function ModalCreate(props) {
   const { isOpenModalCreate, handleCreatePartner, onCancel } = props
   const { TextArea } = Input
-
-  const [isErrorFile, setIsErrorFile] = useState('')
-  const [imgSrc, setImgSrc] = useState('')
 
   const dispatch = useDispatch()
 
@@ -50,21 +48,25 @@ function ModalCreate(props) {
     resolver: yupResolver(validationSchema)
   })
 
+  console.log('errors: ', errors)
+
   const globalDataPartner = useSelector(makeSelectPartner)
   const { isLoading, isUploadImage, dataImage, isCreate } = globalDataPartner
 
   const onSubmit = data => {
-    if (!dataImage) {
-      return setIsErrorFile('Partner Thumbnail is required')
-    }
-    if (Object.keys(data).length && Object.keys(dataImage).length) {
-      const newDataRequest = {
-        ...data,
-        partnerThumbnail: dataImage?.attachmentId || ''
-      }
+    console.log('data: ', data)
 
-      return dispatch(partnerActions.onCreatePartner(newDataRequest))
-    }
+    // if (!dataImage) {
+    //   return setIsErrorFile('Partner Thumbnail is required')
+    // }
+    // if (Object.keys(data).length && Object.keys(dataImage).length) {
+    //   const newDataRequest = {
+    //     ...data,
+    //     partnerThumbnail: dataImage?.attachmentId || ''
+    //   }
+
+    //   return dispatch(partnerActions.onCreatePartner(newDataRequest))
+    // }
   }
 
   useEffect(() => {
@@ -85,19 +87,24 @@ function ModalCreate(props) {
     }
   }, [isCreate])
 
-  const onUploadImage = file => {
-    const reader = new FileReader()
+  const handleChange = info => {
+    const files = info.file || {}
+    if (info.file.status === 'uploading') {
+      // setLoading(true);
 
-    const { files } = file.target
-    console.log('files: ', files)
-    if (files && files.length !== 0) {
-      const blobFromFile = new Blob([], { type: 'image/jpeg' })
-      const formData = new FormData()
-      formData.append('file', blobFromFile, files[0]?.name)
-      reader.onload = () => setImgSrc(reader.result)
-      reader.readAsDataURL(files[0])
+      return
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, url => {
+        const blobFromFile = new Blob([], { type: 'image/jpeg' })
+        const formData = new FormData()
+        formData.append('file', blobFromFile, files?.name)
 
-      dispatch(partnerActions.onUploadImagePartner(formData))
+        setValue('partnerThumbnailId', files?.name, { shouldValidate: true })
+
+        dispatch(programActions.onUploadImageProgram(formData))
+      })
     }
   }
 
@@ -107,7 +114,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <div style={{ paddingTop: '1rem' }} key={item.field}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -139,7 +146,7 @@ function ModalCreate(props) {
       const message = errors[field] && errors[field].message
 
       return (
-        <div key={item.field}>
+        <div style={{ paddingTop: '1rem' }}>
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => {
@@ -168,40 +175,67 @@ function ModalCreate(props) {
       )
     }
 
-    if (item.type === 'SELECT') {
-      return (
-        <div key={item.field}>
-          {/* <Controller
-            control={control}
-            render={({ field }) => {
-              return (
-                <Upload {...propsUpload} style={{ marginBottom: 10 }}>
-                  <Button variant='outlined' size='large' onClick={handleUpload}>
-                    <UploadOutlined />
-                    <div style={{ marginLeft: 10 }}>Select File</div>
-                  </Button>
-                </Upload>
-              )
-            }}
-            name={item.field}
-          /> */}
+    // if (item.type === 'SELECT') {
+    //   const { field } = item
+    //   const message = errors[field] && errors[field].message
 
-          <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-            {isLoading ? <Spin /> : 'Upload New Photo'}
-            <input
-              hidden
-              type='file'
-              onChange={onUploadImage}
-              accept='image/png, image/jpeg'
-              id='account-settings-upload-image'
-            />
-          </ButtonStyled>
-          <Typography style={{ marginTop: 0, marginBottom: 10 }}>
-            {imgSrc && !isLoading ? 'Upload 1 image' : ''}
-          </Typography>
-        </div>
-      )
-    }
+    //   return (
+    //     <div style={{ paddingTop: '1rem' }}>
+    //       <Controller
+    //         control={control}
+    //         render={({ field }) => {
+    //           return (
+    //             <Upload
+    //               {...field}
+    //               style={{ marginBottom: 10 }}
+    //               maxCount={1}
+    //               name={item.field}
+    //               listType='picture'
+    //               accept='image/png, image/jpeg,image/jpg'
+    //               beforeUpload={beforeUpload}
+    //               onChange={handleChange}
+    //             >
+    //               <ButtonStyled variant='outlined' size='large'>
+    //                 <UploadOutlined />
+    //                 <div style={{ marginLeft: 10 }}> Image</div>
+    //               </ButtonStyled>
+    //             </Upload>
+    //           )
+    //         }}
+    //         name={item.field}
+    //       />
+    //       {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>}
+    //     </div>
+    //   )
+    // }
+    return (
+      <div style={{ paddingTop: '1rem' }}>
+        <Controller
+          control={control}
+          render={({ field }) => {
+            return (
+              <Upload
+                {...field}
+                style={{ marginBottom: 10 }}
+                maxCount={1}
+                name={item.field}
+                listType='picture'
+                accept='image/png, image/jpeg,image/jpg'
+                beforeUpload={beforeUpload}
+                onChange={handleChange}
+              >
+                <ButtonStyled variant='outlined' size='large'>
+                  <UploadOutlined />
+                  <div style={{ marginLeft: 10 }}> Image</div>
+                </ButtonStyled>
+              </Upload>
+            )
+          }}
+          name={item.field}
+        />
+        {/* {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>} */}
+      </div>
+    )
   }
 
   return (

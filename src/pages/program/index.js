@@ -12,12 +12,14 @@ import { useSnackbar } from 'notistack'
 import ModalCreate from './components/ModalCreate'
 import { makeSelectPartner, partnerActions } from '../partners-listing/slice'
 import Link from 'next/link'
+import moment from 'moment'
+import Loading from 'src/components/Loading'
 
 function ProgramList() {
   const dispatch = useDispatch()
   const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Program List' }]
   const globalDataProgram = useSelector(makeSelectProgram)
-  const { isLoading, isSuccess, isError } = globalDataProgram
+  const { isLoading, isSuccess, isError, dataList } = globalDataProgram
   const globalDataPartner = useSelector(makeSelectPartner)
   const dataPartner = globalDataPartner?.dataList || []
   const { isUploadImage } = globalDataPartner
@@ -62,11 +64,27 @@ function ProgramList() {
     if (field === 'index') {
       return index + 1
     }
+    if (field === 'target') {
+      return `${item[field]} $`
+    }
+    if (field === 'isClosed') {
+      if (!item.isClosed) {
+        return <div className='text-success font-weight-bold'>Starting</div>
+      }
+
+      return <div className='text-danger font-weight-bold'>Closed</div>
+    }
 
     if (field === 'actions') {
       return (
         <div className='d-flex justify-content-center'>
-          <Link passHref href='/program/program-detail'>
+          <Link
+            passHref
+            href={{
+              pathname: '/program/program-detail',
+              query: { ...item, type: 'not' }
+            }}
+          >
             <Button>
               <EyeOutline />
             </Button>
@@ -82,15 +100,9 @@ function ProgramList() {
     return item[field]
   }, [])
 
-  const fakeData = [
-    {
-      partnerName: 'a',
-      status: 'Starting'
-    }
-  ]
-
   return (
     <div className='container'>
+      <Loading isLoading={isLoading} />
       <Breadcrumb items={breadcrumbItems} />
       <div>
         <div className='d-flex justify-content-end mt-3'>
@@ -105,7 +117,7 @@ function ProgramList() {
         </div>
         <div className='mt-3'>
           <CustomTable
-            data={fakeData || []}
+            data={dataList || []}
             columns={columns}
             parseFunction={parseData}
             isShowPaging

@@ -88,6 +88,13 @@ const navigation = () => {
       path: '/program/program-detail',
       isShowMenu: false,
       role: ['Admin']
+    },
+    {
+      title: 'Test List',
+      icon: HomeOutline,
+      path: '/test-list',
+      isShowMenu: true,
+      role: ['Admin']
     }
   ]
 }

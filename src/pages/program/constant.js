@@ -6,16 +6,25 @@ export const columns = [
     align: 'center'
   },
   {
-    field: 'partnerName',
+    field: 'name',
     maxWidth: 170,
     name: 'Name Program'
   },
   {
-    field: 'status',
+    field: 'endDate',
+    maxWidth: 170,
+    name: 'End Date'
+  },
+  {
+    field: 'target',
+    maxWidth: 170,
+    name: 'Target'
+  },
+  {
+    field: 'isClosed',
     maxWidth: 170,
     name: 'Status'
   },
-
   {
     field: 'actions',
     maxWidth: 170,

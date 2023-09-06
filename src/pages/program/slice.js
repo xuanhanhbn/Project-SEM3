@@ -7,6 +7,8 @@ const initialState = {
   isError: false,
   isCreate: false,
   isUploadImage: false,
+  isClose: false,
+  isCloseError: false,
   dataList: [],
   dataImage: {}
 }
@@ -40,6 +42,20 @@ const programList = createSlice({
       state.isLoading = false
       state.isSuccess = true
       state.dataDetail = action.payload || []
+    },
+
+    onCloseProgram(state) {
+      state.isLoading = true
+    },
+    onCloseProgramFailed(state, action) {
+      state.isLoading = false
+      state.dataError = action.payload || {}
+      state.errorMessage = ''
+      state.isCloseError = true
+    },
+    onCloseProgramSuccess(state, action) {
+      state.isLoading = false
+      state.isClose = true
     },
 
     onUploadImageProgram(state) {
@@ -89,6 +105,8 @@ const programList = createSlice({
       state.isError = false
       state.isUploadImage = false
       state.isCreate = false
+      state.isClose = false
+      state.isCloseError = false
     }
   }
 })

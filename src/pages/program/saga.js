@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { getApiDefault, postApiDefault } from './api'
+import { getApiDefault, postApiDefault, putApiDefault } from './api'
 import { programActions } from './slice'
 
 // Get List Program
@@ -14,6 +14,39 @@ function* onGetList() {
     }
   } catch (error) {
     yield put(programActions.onGetListProgramFailed('internet'))
+  }
+}
+
+// Get List Details Program
+function* onGetListDetails(data) {
+  const url = `/Program/${data?.payload?.programId}`
+  try {
+    const response = yield call(getApiDefault, url)
+    if (response && response.data && response.status === 200) {
+      yield put(programActions.onGetDetailProgramSuccess(response.data))
+    } else {
+      yield put(programActions.onGetDetailProgramFailed())
+    }
+  } catch (error) {
+    yield put(programActions.onGetDetailProgramFailed('internet'))
+  }
+}
+
+// Close Program
+function* onCloseProgram(data) {
+  const id = data?.payload?.dataDetail?.programId
+  const payload = data?.payload?.data
+  const url = `/Program/close/${id}`
+  try {
+    const response = yield call(putApiDefault, url, payload)
+    console.log('response: ', response)
+    if (response && response.data && response.status === 200) {
+      yield put(programActions.onCloseProgramSuccess(response.data))
+    } else {
+      yield put(programActions.onCloseProgramFailed())
+    }
+  } catch (error) {
+    yield put(programActions.onCloseProgramFailed('internet'))
   }
 }
 
@@ -70,4 +103,6 @@ export default function* programSaga() {
   yield takeLatest(programActions.onGetListProgram, onGetList)
   yield takeLatest(programActions.onUploadImageProgram, onUploadImage)
   yield takeLatest(programActions.onCreateProgram, onCreateProgram)
+  yield takeLatest(programActions.onGetDetailProgram, onGetListDetails)
+  yield takeLatest(programActions.onCloseProgram, onCloseProgram)
 }

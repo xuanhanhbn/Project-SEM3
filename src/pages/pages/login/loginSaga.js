@@ -9,6 +9,7 @@ function* onLogin(data) {
     const response = yield call(postApiProduct, url, payload)
     if (response && response.status === 200) {
       yield put(loginPageActions.loginPageSuccess(response.data))
+      localStorage.setItem('loginPage', JSON.stringify(response.data))
     } else {
       yield put(loginPageActions.loginPageFailed())
     }

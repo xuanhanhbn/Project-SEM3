@@ -1,18 +1,109 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 
-import { Breadcrumb } from 'antd'
-import { Button } from '@mui/material'
+import { Breadcrumb, Modal } from 'antd'
+import { Button, InputLabel, TextField, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
+import { makeSelectProgram, programActions } from '../slice'
+import { useDispatch, useSelector } from 'react-redux'
+import Loading from 'src/components/Loading'
+import { Controller, useForm } from 'react-hook-form'
+
+// YUP
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
+import { useSnackbar } from 'notistack'
+
+const validationSchema = Yup.object().shape({
+  closeReason: Yup.string().required('Close Reason is required')
+})
 
 function ProgramDetail() {
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Program List' }, { title: 'Program Detail' }]
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const globalData = router?.query
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
+  const breadcrumbItems = [
+    { title: 'Company Active' },
+    { href: '/program', title: 'Program List' },
+    { title: 'Program Detail' }
+  ]
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const getGlobalDataDetails = useSelector(makeSelectProgram)
+  const { dataDetail, isLoading, isClose, isCloseError } = getGlobalDataDetails
+
+  const { enqueueSnackbar } = useSnackbar()
+  const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
+
+  useEffect(() => {
+    if (globalData && Object.keys(globalData).length) {
+      dispatch(programActions.onGetDetailProgram(globalData))
+    }
+  }, [globalData])
+
+  useEffect(() => {
+    if (isClose) {
+      dispatch(programActions.clear())
+      dispatch(programActions.onGetDetailProgram(globalData))
+      handleCancel()
+
+      return handleShowSnackbar('Close program success')
+    }
+  }, [isClose])
+
+  useEffect(() => {
+    if (isCloseError) {
+      dispatch(programActions.clear())
+
+      return handleShowSnackbar('An error occurred, please try again.', 'error')
+    }
+  }, [isCloseError])
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const onSubmit = data => {
+    dispatch(programActions.onCloseProgram({ dataDetail, data }))
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleReturnStatus = () => {
+    if (!dataDetail?.isClosed) {
+      return (
+        <div className='text-success' style={{ marginLeft: 2, fontWeight: 500, fontSize: 16 }}>
+          Starting
+        </div>
+      )
+    }
+
+    return (
+      <div className='text-danger' style={{ marginLeft: 2, fontWeight: 500, fontSize: 16 }}>
+        Closed
+      </div>
+    )
+  }
 
   return (
     <div className='container'>
       <Breadcrumb items={breadcrumbItems} />
+      <Loading isLoading={isLoading} />
       <div style={{ paddingBottom: 120, paddingTop: 80 }}>
         <div className='row'>
           <div className='col-lg-8 col-md-12 title'>
-            <h3>Our donation is hope for poor childrens</h3>
+            <h3>{dataDetail?.name || ''}</h3>
 
             <div className='cause-details__content'>
               <div className='cause-card'>
@@ -23,16 +114,19 @@ function ProgramDetail() {
                   <div className='cause-card__content'>
                     <div className='cause-card__top'>
                       <div className='progress' style={{ height: '20px' }}>
-                        <div className='progress-bar progress-bar-striped' style={{ width: '70%', height: '20px' }}>
+                        <div
+                          className='progress-bar progress-bar-striped'
+                          style={{ width: dataDetail?.totalDonation, height: '20px' }}
+                        >
                           70%
                         </div>
                       </div>
                       <div className='justify-content-between cause-card__goals d-flex'>
                         <p>
-                          <strong>Raised:</strong> $25,270
+                          <strong>Raised:</strong> $0
                         </p>
                         <p>
-                          <strong>Goal:</strong> $30,000
+                          <strong>Goal:</strong> ${dataDetail?.target}
                         </p>
                       </div>
                     </div>
@@ -49,45 +143,37 @@ function ProgramDetail() {
                     </li>
                     <li>
                       <h3>
-                        End date : <span>11-11-1111</span>
+                        End date : <span>{dataDetail?.endDate}</span>
+                      </h3>
+                    </li>
+                    <li>
+                      <h3>
+                        Description : <span>{dataDetail?.description}</span>
                       </h3>
                     </li>
                   </div>
                   <div>
                     <li>
                       <h3>
-                        Created : <span>Admin</span>
+                        Created : <span>{dataDetail?.createdByName}</span>
                       </h3>
                     </li>
                     <li>
-                      <h3>
-                        Status : <span>Starting</span>
+                      <h3 className='d-flex align-items-center'>
+                        Status :<span>{handleReturnStatus()}</span>
                       </h3>
                     </li>
                   </div>
                 </ul>
               </div>
-              {/* <p>
-                There are many variations of passages of Lorem Ipsum available, but the majority have suffered
-                alteration in some form, by injected humour, or randomised words which don't look even slightly
-                believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything
-                embarrassing hidden in the middle of text.{' '}
-              </p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-                into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-                release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-                software like.
-              </p>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                scrambled it to make a type specimen book.{' '}
-              </p> */}
+
               <div>
-                <Button style={{ backgroundColor: '#9155FD', color: 'white' }} size='large' variant='contained'>
+                <Button
+                  style={{ backgroundColor: '#9155FD', color: 'white' }}
+                  size='large'
+                  variant='contained'
+                  onClick={showModal}
+                >
                   End of program
                 </Button>
               </div>
@@ -124,6 +210,38 @@ function ProgramDetail() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal title='Close Program' open={isModalOpen} onOk={handleSubmit(onSubmit)} onCancel={handleCancel}>
+          <div>
+            <Controller
+              control={control}
+              name='closeReason'
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <>
+                    <form>
+                      <TextField
+                        fullWidth
+                        placeholder='Close Reason'
+                        label='Close Reason'
+                        id='outlined-adornment-amount'
+                        required
+                        name='closeReason'
+                        onChange={onChange}
+                        value={value}
+                      />
+                      {errors && errors.closeReason && (
+                        <Typography className='text-danger my-2'>{errors?.closeReason?.message}</Typography>
+                      )}
+                    </form>
+                  </>
+                )
+              }}
+            />
+          </div>
+          <p className='text-danger'>Are you sure you want to end this program? This action cannot be undone.</p>
+        </Modal>
+      )}
     </div>
   )
 }

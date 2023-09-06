@@ -20,7 +20,7 @@ function* onGetList() {
 // CREATE
 function* onCreate(data) {
   const payload = data?.payload
-  const url = '/Document'
+  const url = '/Page/create'
   try {
     const response = yield call(postApiDefault, url, payload)
     console.log('response: ', response)
