@@ -76,21 +76,6 @@ const StyledGrid1 = styled(Grid)(({ theme }) => ({
   }
 }))
 
-const onChangeAvatar = file => {
-  const reader = new FileReader()
-
-  const { files } = file.target
-  if (files && files.length !== 0) {
-    const blobFromFile = new Blob([], { type: 'image/jpeg' })
-    const formData = new FormData()
-    formData.append('file', blobFromFile, files[0]?.name)
-    console.log('reader: ', reader)
-    reader.onload = () => setImgSrc(reader.result)
-    reader.readAsDataURL(files[0])
-    dispatch(partnerActions.onChangeImagePartner(formData))
-  }
-}
-
 function PartnerDetail() {
   const router = useRouter()
   const globalData = router?.query
@@ -176,6 +161,8 @@ function PartnerDetail() {
     document.getElementById('name').focus()
   }
 
+  // console.log('partnerDetail: ', partnerDetail)
+
   useEffect(() => {
     if (partnerDetail && Object.keys(partnerDetail).length) {
       setValue('name', partnerDetail?.name)
@@ -242,10 +229,9 @@ function PartnerDetail() {
 
     const newDataRequest = {
       ...data,
-      ...globalData,
+      partnerId: globalData?.partnerId,
       partnerThumbnailId: dataImage?.attachmentId
     }
-
     dispatch(partnerActions.onUpdateDetailPartner(newDataRequest))
   }
 
@@ -319,8 +305,8 @@ function PartnerDetail() {
                         paddingTop: 14
                       }}
                     >
-                      <div style={{ display: 'flex', marginBottom: 10 }}>
-                        <InputLabel style={{ marginRight: 15 }}>Name</InputLabel>
+                      <div className='d-flex align-items-center mb-2'>
+                        <InputLabel style={{ marginRight: 15 }}>Name: </InputLabel>
                         <Controller
                           control={control}
                           render={({ field: { onChange, value } }) => {
@@ -328,11 +314,12 @@ function PartnerDetail() {
                               <input
                                 id='name'
                                 style={{
-                                  border: 'none',
-                                  backgroundColor: 'transparent',
                                   color: 'black',
                                   fontWeight: 600,
-                                  marginBottom: 10
+                                  border: !values.editText ? '1px solid #eee' : 'none',
+                                  backgroundColor: !values.editText ? '#eee' : 'transparent',
+                                  padding: !values.editText ? 10 : 0,
+                                  borderRadius: !values.editText ? 8 : 0
                                 }}
                                 onChange={onChange}
                                 value={value}
@@ -344,7 +331,7 @@ function PartnerDetail() {
                         />
                       </div>
 
-                      <div style={{ display: 'flex', marginBottom: 10 }}>
+                      <div className='d-flex align-items-center mb-2'>
                         <InputLabel style={{ marginRight: 15 }}>Email</InputLabel>
                         <Controller
                           control={control}
@@ -352,8 +339,10 @@ function PartnerDetail() {
                             return (
                               <input
                                 style={{
-                                  border: 'none',
-                                  backgroundColor: 'transparent',
+                                  border: !values.editText ? '1px solid #eee' : 'none',
+                                  backgroundColor: !values.editText ? '#eee' : 'transparent',
+                                  padding: !values.editText ? 10 : 0,
+                                  borderRadius: !values.editText ? 8 : 0,
                                   color: 'black',
                                   fontWeight: 600
                                 }}
@@ -378,11 +367,11 @@ function PartnerDetail() {
                                 onChange={onChange}
                                 value={value}
                                 style={{
-                                  border: 'none',
-                                  backgroundColor: 'transparent',
+                                  border: !values.editText ? '1px solid #eee' : 'none',
+                                  borderRadius: !values.editText ? 8 : 0,
                                   color: 'black'
                                 }}
-                                autoSize
+                                showCount
                               />
                             )
                           }}
