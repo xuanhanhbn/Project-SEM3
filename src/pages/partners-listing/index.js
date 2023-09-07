@@ -29,7 +29,7 @@ function PartnerList() {
     dispatch(partnerActions.onGetListPartner())
   }, [])
 
-  console.log('globalDataPartner', globalDataPartner)
+  console.log('dataList', dataList)
 
   // Call api khi xoá partner
   const handleDeletePartners = () => {
@@ -83,7 +83,7 @@ function PartnerList() {
     }
 
     if (field === 'createdAt') {
-      const formatDate = moment(item?.createdAt).format('YYYY/MM/DD')
+      const formatDate = moment(item?.partnerThumbnail.createdAt).format('YYYY/MM/DD')
 
       return <div>{formatDate}</div>
     }

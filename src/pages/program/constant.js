@@ -10,6 +10,7 @@ export const columns = [
     maxWidth: 170,
     name: 'Name Program'
   },
+
   {
     field: 'endDate',
     maxWidth: 170,
@@ -40,10 +41,11 @@ export const inputCreateProgram = [
     type: 'INPUT'
   },
   {
-    field: 'partnerId',
-    label: 'Partner Name',
-    type: 'SELECT_PARTNER'
+    field: 'donationReason',
+    label: 'Donation Reason',
+    type: 'SELECT_REASON'
   },
+
   {
     field: 'donationInfo',
     label: 'Donation Info',
@@ -61,9 +63,9 @@ export const inputCreateProgram = [
     type: 'SELECT_DATE'
   },
   {
-    field: 'donationReason',
-    label: 'Donation Reason',
-    type: 'SELECT_REASON'
+    field: 'partnerId',
+    label: 'Partner Name',
+    type: 'SELECT_PARTNER'
   },
   {
     field: 'description',
