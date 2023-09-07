@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { makeSelectPartner, partnerActions } from '../../slice'
 import { useSnackbar } from 'notistack'
 import { UploadOutlined } from '@ant-design/icons'
-import { beforeUpload } from 'src/utils/common'
+import { beforeUpload, getBase64 } from 'src/utils/common'
 
 const validationSchema = Yup.object().shape({
   partnerThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
@@ -42,31 +42,23 @@ function ModalCreate(props) {
     handleSubmit,
     clearErrors,
     setError,
+    setValue,
     control,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
-  console.log('errors: ', errors)
-
   const globalDataPartner = useSelector(makeSelectPartner)
   const { isLoading, isUploadImage, dataImage, isCreate } = globalDataPartner
 
   const onSubmit = data => {
-    console.log('data: ', data)
+    const newDataRequest = {
+      ...data,
+      partnerThumbnailId: dataImage?.attachmentId
+    }
 
-    // if (!dataImage) {
-    //   return setIsErrorFile('Partner Thumbnail is required')
-    // }
-    // if (Object.keys(data).length && Object.keys(dataImage).length) {
-    //   const newDataRequest = {
-    //     ...data,
-    //     partnerThumbnail: dataImage?.attachmentId || ''
-    //   }
-
-    //   return dispatch(partnerActions.onCreatePartner(newDataRequest))
-    // }
+    dispatch(partnerActions.onCreatePartner(newDataRequest))
   }
 
   useEffect(() => {
@@ -87,7 +79,7 @@ function ModalCreate(props) {
     }
   }, [isCreate])
 
-  const handleChange = info => {
+  const handleUploadImage = info => {
     const files = info.file || {}
     if (info.file.status === 'uploading') {
       // setLoading(true);
@@ -103,7 +95,7 @@ function ModalCreate(props) {
 
         setValue('partnerThumbnailId', files?.name, { shouldValidate: true })
 
-        dispatch(programActions.onUploadImageProgram(formData))
+        dispatch(partnerActions.onUploadImagePartner(formData))
       })
     }
   }
@@ -193,7 +185,7 @@ function ModalCreate(props) {
     //               listType='picture'
     //               accept='image/png, image/jpeg,image/jpg'
     //               beforeUpload={beforeUpload}
-    //               onChange={handleChange}
+    //               onChange={handleUploadImage}
     //             >
     //               <ButtonStyled variant='outlined' size='large'>
     //                 <UploadOutlined />
@@ -208,6 +200,9 @@ function ModalCreate(props) {
     //     </div>
     //   )
     // }
+    const { field } = item
+    const message = errors[field] && errors[field].message
+
     return (
       <div style={{ paddingTop: '1rem' }}>
         <Controller
@@ -215,25 +210,24 @@ function ModalCreate(props) {
           render={({ field }) => {
             return (
               <Upload
-                {...field}
                 style={{ marginBottom: 10 }}
                 maxCount={1}
                 name={item.field}
                 listType='picture'
                 accept='image/png, image/jpeg,image/jpg'
                 beforeUpload={beforeUpload}
-                onChange={handleChange}
+                onChange={handleUploadImage}
               >
                 <ButtonStyled variant='outlined' size='large'>
                   <UploadOutlined />
-                  <div style={{ marginLeft: 10 }}> Image</div>
+                  <div style={{ marginLeft: 10 }}>Upload Image</div>
                 </ButtonStyled>
               </Upload>
             )
           }}
           name={item.field}
         />
-        {/* {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>} */}
+        {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>}
       </div>
     )
   }

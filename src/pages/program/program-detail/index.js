@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loading from 'src/components/Loading'
 import { Controller, useForm } from 'react-hook-form'
 
+import moment from 'moment'
+
 // YUP
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -96,6 +98,17 @@ function ProgramDetail() {
     )
   }
 
+  const handleCalculatorPercent = () => {
+    const Percentage = 0
+    if (dataDetail?.target > 0 && dataDetail?.totalDonation > 0) {
+      const Percentage = (dataDetail?.target / dataDetail?.totalDonation) * 100
+
+      return Percentage
+    }
+
+    return Percentage
+  }
+
   return (
     <div className='container'>
       <Breadcrumb items={breadcrumbItems} />
@@ -109,16 +122,20 @@ function ProgramDetail() {
               <div className='cause-card'>
                 <div className='cause-card__inner'>
                   <div className='cause-card__image'>
-                    <img style={{ height: '400px', width: '100%' }} src='/images/cards/analog-clock.jpg' alt='' />
+                    <img
+                      style={{ height: '400px', width: '100%' }}
+                      src={`${dataDetail?.programThumbnail?.path}`}
+                      alt={`Image Program Detail_${dataDetail?.name}`}
+                    />
                   </div>
                   <div className='cause-card__content'>
                     <div className='cause-card__top'>
                       <div className='progress' style={{ height: '20px' }}>
                         <div
                           className='progress-bar progress-bar-striped'
-                          style={{ width: dataDetail?.totalDonation, height: '20px' }}
+                          style={{ width: handleCalculatorPercent(), height: '20px' }}
                         >
-                          70%
+                          {handleCalculatorPercent()} %
                         </div>
                       </div>
                       <div className='justify-content-between cause-card__goals d-flex'>
@@ -126,7 +143,7 @@ function ProgramDetail() {
                           <strong>Raised:</strong> $0
                         </p>
                         <p>
-                          <strong>Goal:</strong> ${dataDetail?.target}
+                          <strong>Goal:</strong> ${dataDetail?.target?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         </p>
                       </div>
                     </div>
@@ -138,7 +155,7 @@ function ProgramDetail() {
                   <div>
                     <li>
                       <h3>
-                        Start date : <span>31-2-1999</span>
+                        Start date : <span>{moment(dataDetail?.createdAt).format('YYYY-MM-DD')}</span>
                       </h3>
                     </li>
                     <li>

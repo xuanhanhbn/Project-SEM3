@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { getApiDefault, postApiDefault, putApiNoData } from './api'
+import { getApiDefault, postApiDefault, putApiDefault, putApiNoData } from './api'
 import { partnerActions } from './slice'
 
 // Get List Partner
@@ -19,7 +19,6 @@ function* onGetListPartner() {
 
 // get detail
 function* onGetListDetailPartner(data) {
-  console.log('data saga', data)
   const payload = data?.payload
   const url = `/Partner/${payload?.partnerId}`
   try {
@@ -36,10 +35,11 @@ function* onGetListDetailPartner(data) {
 
 // update data detail
 function* onUpdateDetailPartner(data) {
+  const { key, partnerId, partnerThumbnail, type, ...rest } = data?.payload
   const payload = data?.payload?.partnerId
   const url = `/Partner/update/${payload}`
   try {
-    const response = yield call(putApiNoData, url)
+    const response = yield call(putApiDefault, url, rest)
     if (response && response.status === 200) {
       yield put(partnerActions.onUpdateDetailPartnerSuccess(response.data))
     } else {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, Upload } from 'antd'
 import Loading from 'src/components/Loading'
 import CustomTable from 'src/components/TableCommon'
 
@@ -27,8 +27,13 @@ import { partnerActions, makeSelectPartner } from '../slice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import moment from 'moment'
+import { EyeOutline } from 'mdi-material-ui'
+import { UploadOutlined } from '@ant-design/icons'
 import { Label } from 'mdi-material-ui'
 import { InputLabel } from '@mui/material'
+import Link from 'next/link'
+import { beforeUpload, getBase64 } from 'src/utils/common'
+import { useSnackbar } from 'notistack'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -54,16 +59,6 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     textAlign: 'center'
   }
 }))
-
-// const ResetButtonStyled = styled(Button)(({ theme }) => ({
-//   marginLeft: theme.spacing(4.5),
-//   [theme.breakpoints.down('sm')]: {
-//     width: '100%',
-//     marginLeft: 0,
-//     textAlign: 'center',
-//     marginTop: theme.spacing(4)
-//   }
-// }))
 
 // Styled Grid component
 const StyledGrid1 = styled(Grid)(({ theme }) => ({
@@ -102,18 +97,37 @@ function PartnerDetail() {
   const dispatch = useDispatch()
 
   const globalDataPartner = useSelector(makeSelectPartner)
+  const { isUploadImage, dataImage, isUpdateSuccess } = globalDataPartner
   const partnerDetail = globalDataPartner?.dataDetail
   const isLoading = globalDataPartner?.isLoading
   const dataProgramByPartner = partnerDetail?.programs || []
 
+  const { enqueueSnackbar } = useSnackbar()
+  const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
+
   //get data
   useEffect(() => {
-    if (globalData && Object.keys(globalData).length) dispatch(partnerActions.onGetListDetailPartner(globalData))
+    if (globalData && Object.keys(globalData).length) {
+      dispatch(partnerActions.onGetListDetailPartner(globalData))
+    }
   }, [globalData])
 
-  // console.log('globalData', globalData)
-  // console.log('globalDataPartner', globalDataPartner)
-  // console.log('partnerDetail', partnerDetail)
+  useEffect(() => {
+    if (isUploadImage) {
+      dispatch(partnerActions.clear())
+
+      return handleShowSnackbar('Upload Image Success')
+    }
+  }, [isUploadImage])
+
+  useEffect(() => {
+    if (isUpdateSuccess) {
+      dispatch(partnerActions.clear())
+      dispatch(partnerActions.onGetListDetailPartner(globalData))
+
+      return handleShowSnackbar('Success')
+    }
+  }, [isUpdateSuccess])
 
   const [values, setValues] = useState({
     editText: true
@@ -133,6 +147,25 @@ function PartnerDetail() {
     { href: '/partners-listing', title: 'Partner List' },
     { title: 'Partner Detail' }
   ]
+
+  const handleChangeImageAvatar = info => {
+    const files = info.file || {}
+    if (info.file.status === 'uploading') {
+      // setLoading(true);
+
+      return
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, url => {
+        const blobFromFile = new Blob([], { type: 'image/jpeg' })
+        const formData = new FormData()
+        formData.append('file', blobFromFile, files?.name)
+
+        dispatch(partnerActions.onUploadImagePartner(formData))
+      })
+    }
+  }
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -160,18 +193,19 @@ function PartnerDetail() {
       return index + 1
     }
 
-    // if (field === 'actions') {
-    //   return (
-    //     <div className='d-flex justify-content-center'>
-    //       <Button>
-    //         <EyeOutline />
-    //       </Button>
-    //       <Button onClick={() => setIsOpenModalDelete(true)}>
-    //         <Delete style={{ color: 'red' }} />
-    //       </Button>
-    //     </div>
-    //   )
-    // }
+    if (field === 'target') {
+      const formatNumber = item[field].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+      return `${formatNumber} $`
+    }
+
+    if (field === 'isClosed') {
+      if (!item.isClosed) {
+        return <div className='text-success font-weight-bold'>Starting</div>
+      }
+
+      return <div className='text-danger font-weight-bold'>Closed</div>
+    }
 
     if (field === 'createdAt' || field === 'endDate') {
       const formatDate = moment(item?.createdAt).format('YYYY/MM/DD')
@@ -182,6 +216,23 @@ function PartnerDetail() {
     if (field === 'contentType') {
       return <div>{item?.contentType || '-'}</div>
     }
+    if (field === 'actions') {
+      return (
+        <div className='d-flex justify-content-center'>
+          <Link
+            passHref
+            href={{
+              pathname: '/program/program-detail',
+              query: { ...item, type: 'not' }
+            }}
+          >
+            <Button>
+              <EyeOutline />
+            </Button>
+          </Link>
+        </div>
+      )
+    }
 
     return item[field]
   }, [])
@@ -189,7 +240,13 @@ function PartnerDetail() {
   const onSubmit = data => {
     setValues({ editText: true })
 
-    console.log(data)
+    const newDataRequest = {
+      ...data,
+      ...globalData,
+      partnerThumbnailId: dataImage?.attachmentId
+    }
+
+    dispatch(partnerActions.onUpdateDetailPartner(newDataRequest))
   }
 
   return (
@@ -238,25 +295,22 @@ function PartnerDetail() {
                     >
                       <ImgStyled
                         style={{ maxHeight: 100, maxWidth: 100, marginBottom: 20, marginRight: 0 }}
-                        src={partnerDetail.path}
-                        alt=''
+                        src={partnerDetail?.partnerThumbnail?.path}
+                        alt={`Image Logo Detail_${partnerDetail?.name}`}
                       />
-                      '
-                      <ButtonStyled
-                        disabled={values.editText ? true : false}
-                        component='label'
-                        variant='contained'
-                        htmlFor='account-settings-upload-image'
+                      <Upload
+                        style={{ marginBottom: 10 }}
+                        maxCount={1}
+                        listType='picture'
+                        accept='image/png, image/jpeg,image/jpg'
+                        beforeUpload={beforeUpload}
+                        onChange={handleChangeImageAvatar}
                       >
-                        Upload Logo
-                        <input
-                          hidden
-                          onClick={onChangeAvatar}
-                          type='file'
-                          accept='image/png, image/jpeg'
-                          id='account-settings-upload-image'
-                        />
-                      </ButtonStyled>
+                        <ButtonStyled variant='outlined' size='large'>
+                          <UploadOutlined />
+                          <div style={{ marginLeft: 10 }}>Upload Image</div>
+                        </ButtonStyled>
+                      </Upload>
                     </Box>
                     <Box
                       style={{
@@ -312,8 +366,8 @@ function PartnerDetail() {
                           name='email'
                         />
                       </div>
-                      <div>
-                        <InputLabel style={{ marginBottom: 10 }}>Description</InputLabel>
+                      <div className='d-flex align-items-center'>
+                        <InputLabel style={{ overflow: 'visible' }}>Description: </InputLabel>
 
                         <Controller
                           control={control}
@@ -358,7 +412,7 @@ function PartnerDetail() {
               >
                 <div>
                   <Typography sx={{ marginTop: 0, marginBottom: 5, color: 'black', fontSize: 24, fontWeight: 600 }}>
-                    program
+                    {`Program By ${partnerDetail?.name}`}
                   </Typography>
                 </div>
 

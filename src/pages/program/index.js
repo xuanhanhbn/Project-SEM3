@@ -65,7 +65,9 @@ function ProgramList() {
       return index + 1
     }
     if (field === 'target') {
-      return `${item[field]} $`
+      const formatNumber = item[field].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+      return `${formatNumber} $`
     }
     if (field === 'isClosed') {
       if (!item.isClosed) {

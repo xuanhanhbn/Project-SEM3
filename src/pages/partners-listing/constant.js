@@ -10,11 +10,7 @@ export const columns = [
     maxWidth: 170,
     name: 'Name Partner'
   },
-  {
-    field: 'contentType',
-    maxWidth: 170,
-    name: 'Content Type'
-  },
+
   {
     field: 'createdAt',
     maxWidth: 170,

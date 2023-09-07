@@ -25,6 +25,17 @@ export const columns = [
     field: 'target',
     maxWidth: 170,
     name: 'Target'
+  },
+  {
+    field: 'isClosed',
+    maxWidth: 170,
+    name: 'Status'
+  },
+  {
+    field: 'actions',
+    maxWidth: 170,
+    name: 'Actions',
+    align: 'center'
   }
 ]
 
