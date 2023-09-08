@@ -341,7 +341,6 @@ function ModalCreate(props) {
                     isMulti
                     isSearchable
                     isClearable
-                    className='z-2'
                     styles={categoryStyles}
                   />
                 </>
@@ -408,7 +407,7 @@ function ModalCreate(props) {
                 >
                   <ButtonStyled variant='outlined' size='large'>
                     <UploadOutlined />
-                    <div style={{ marginLeft: 10 }}> Image</div>
+                    <div style={{ marginLeft: 10 }}>Upload Image</div>
                   </ButtonStyled>
                 </Upload>
               )
@@ -416,23 +415,6 @@ function ModalCreate(props) {
             name={item.field}
           />
           {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>}
-          {/* <Typography style={{ marginTop: 0, marginBottom: 10 }}>
-            {imgSrc && !isLoading ? 'Upload 1 image' : ''}
-          </Typography> */}
-
-          {/* <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-            {isLoading ? <Spin /> : 'Upload New Photo'}
-            <input
-              hidden
-              type='file'
-              onChange={onUploadImage}
-              accept='image/png, image/jpeg'
-              id='account-settings-upload-image'
-            />
-          </ButtonStyled>
-          <Typography style={{ marginTop: 0, marginBottom: 10 }}>
-            {imgSrc && !isLoading ? 'Upload 1 image' : ''}
-          </Typography> */}
         </Grid>
       )
     }
@@ -442,6 +424,7 @@ function ModalCreate(props) {
     <div>
       <Modal
         style={{ top: 20 }}
+        width={1120}
         title='Create Program'
         open={isOpenModalCreate}
         onOk={handleSubmit(onSubmit)}

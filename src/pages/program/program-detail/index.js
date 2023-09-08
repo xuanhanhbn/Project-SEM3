@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 
-import { Breadcrumb, Modal } from 'antd'
+import { Breadcrumb, Divider, Modal } from 'antd'
 import { Button, InputLabel, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { makeSelectProgram, programActions } from '../slice'
@@ -15,6 +15,7 @@ import moment from 'moment'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { useSnackbar } from 'notistack'
+import DisplayRealTime from 'src/components/RealTime'
 
 const validationSchema = Yup.object().shape({
   closeReason: Yup.string().required('Close Reason is required')
@@ -101,7 +102,7 @@ function ProgramDetail() {
   const handleCalculatorPercent = () => {
     const Percentage = 0
     if (dataDetail?.target > 0 && dataDetail?.totalDonation > 0) {
-      const Percentage = (dataDetail?.target / dataDetail?.totalDonation) * 100
+      const Percentage = (dataDetail?.totalDonation / dataDetail?.target) * 100
 
       return Percentage
     }
@@ -140,7 +141,8 @@ function ProgramDetail() {
                       </div>
                       <div className='justify-content-between cause-card__goals d-flex'>
                         <p>
-                          <strong>Raised:</strong> $0
+                          <strong>Raised:</strong> $
+                          {dataDetail?.totalDonation?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         </p>
                         <p>
                           <strong>Goal:</strong> ${dataDetail?.target?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -152,7 +154,7 @@ function ProgramDetail() {
               </div>
               <div>
                 <ul className='list-unstyled cause-details__donations-list d-flex justify-content-between'>
-                  <div>
+                  <div style={{ width: '70%' }}>
                     <li>
                       <h3>
                         Start date : <span>{moment(dataDetail?.createdAt).format('YYYY-MM-DD')}</span>
@@ -198,29 +200,29 @@ function ProgramDetail() {
 
             <div className='result' />
           </div>
-          <div style={{ paddingLeft: 40, paddingRight: 40 }} className='col-lg-4 col-md-12'>
+          <div className='col-lg-1'>
+            <Divider type='vertical' style={{ height: '100%' }} />
+          </div>
+          <div className='col-lg-3 col-md-12'>
             <div className='cause-details__sidebar'>
               <div className='cause-details__donations'>
                 <h4 className='cause-details__donations-title'>Donations</h4>
                 <ul className='list-unstyled cause-details__donations-list'>
-                  <li style={{ paddingTop: 20, paddingBottom: 20 }}>
-                    <h3>
-                      David Marks <span>3 hours ago</span>
-                    </h3>
-                    <span>God bless you dear</span>
-                  </li>
-                  <li style={{ paddingTop: 20, paddingBottom: 20 }}>
-                    <h3>
-                      David Marks <span>3 hours ago</span>
-                    </h3>
-                    <span>God bless you dear</span>
-                  </li>
-                  <li style={{ paddingTop: 20, paddingBottom: 20 }}>
-                    <h3>
-                      Anonymus <span>3 hours ago</span>
-                    </h3>
-                    <span>God bless you dear</span>
-                  </li>
+                  {Array.isArray(dataDetail?.enrollments) &&
+                    dataDetail?.enrollments &&
+                    dataDetail?.enrollments.map(item => {
+                      return (
+                        <li style={{ paddingTop: 20, paddingBottom: 20 }} key={item.enrollmentId}>
+                          <div className='d-flex align-items-center justify-content-between'>
+                            <h3 className='mb-0'>{item?.createdByName}</h3>
+                            <h3>+ 5$</h3>
+                          </div>
+                          <span>
+                            <DisplayRealTime time={item?.createdAt} />
+                          </span>
+                        </li>
+                      )
+                    })}
                 </ul>
               </div>
             </div>

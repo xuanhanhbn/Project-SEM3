@@ -92,9 +92,9 @@ function ProgramList() {
             </Button>
           </Link>
 
-          <Button onClick={() => setIsOpenModalDelete(true)}>
+          {/* <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
-          </Button>
+          </Button> */}
         </div>
       )
     }
