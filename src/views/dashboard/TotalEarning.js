@@ -132,7 +132,7 @@ const TotalEarning = props => {
                 }}
               >
                 <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Box className='d-flex justify-content-center align-items-center'>
+                  <Box className=' justify-content-center align-items-center'>
                     <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
                       {item.partnerName}
                     </Typography>

@@ -43,12 +43,12 @@ function PageList() {
   }, [])
 
   // Xử lí khi có lỗi
-  useEffect(() => {
-    if (isError) {
-      dispatch(pageListActions.clear())
-      handleShowSnackbar('An error occurred, please try again.', 'error')
-    }
-  }, [isError])
+  // useEffect(() => {
+  //   if (isError) {
+  //     dispatch(pageListActions.clear())
+  //     handleShowSnackbar('An error occurred, please try again.', 'error')
+  //   }
+  // }, [isError])
 
   return (
     <div className='container'>

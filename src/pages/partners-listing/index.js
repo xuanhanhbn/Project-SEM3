@@ -72,10 +72,10 @@ function PartnerList() {
               <EyeOutline />
             </Button>
           </Link>
-
+          {/* 
           <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
-          </Button>
+          </Button> */}
         </div>
       )
     }
