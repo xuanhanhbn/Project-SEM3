@@ -86,10 +86,11 @@ function ModalCreate(props) {
 
       return
     }
+
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, url => {
-        const blobFromFile = new Blob([], { type: 'image/jpeg' })
+        const blobFromFile = new Blob([info.file.originFileObj], { type: 'image/jpeg' })
         const formData = new FormData()
         formData.append('file', blobFromFile, files?.name)
 

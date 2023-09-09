@@ -102,24 +102,7 @@ function ModalCreate(props) {
     }
   }, [isCreate])
 
-  // const onUploadImage = file => {
-  //   const reader = new FileReader()
-
-  //   const { files } = file.target
-  //   console.log('files; ', file)
-
-  //   if (file) {
-  //     const blobFromFile = new Blob([], { type: 'image/jpeg' })
-  //     const formData = new FormData()
-  //     formData.append('file', blobFromFile, files[0]?.name)
-  //     reader.onload = () => setImgSrc(reader.result)
-  //     reader.readAsDataURL(files[0])
-
-  //     dispatch(programActions.onUploadImageProgram(formData))
-  //   }
-  // }
-
-  const handleChange = info => {
+  const handleUploadImage = info => {
     const files = info.file || {}
     if (info.file.status === 'uploading') {
       // setLoading(true);
@@ -129,7 +112,7 @@ function ModalCreate(props) {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, url => {
-        const blobFromFile = new Blob([], { type: 'image/jpeg' })
+        const blobFromFile = new Blob([info.file.originFileObj], { type: 'image/jpeg' })
         const formData = new FormData()
         formData.append('file', blobFromFile, files?.name)
 
@@ -403,7 +386,7 @@ function ModalCreate(props) {
                   listType='picture'
                   accept='image/png, image/jpeg,image/jpg'
                   beforeUpload={beforeUpload}
-                  onChange={handleChange}
+                  onChange={handleUploadImage}
                 >
                   <ButtonStyled variant='outlined' size='large'>
                     <UploadOutlined />

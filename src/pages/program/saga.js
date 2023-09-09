@@ -4,7 +4,7 @@ import { programActions } from './slice'
 
 // Get List Program
 function* onGetList() {
-  const url = '/Program?page=0&size=10'
+  const url = '/Program?page=0&size=20'
   try {
     const response = yield call(getApiDefault, url)
     if (response && response.data && response.status === 200) {

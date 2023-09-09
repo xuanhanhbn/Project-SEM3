@@ -29,8 +29,6 @@ function PartnerList() {
     dispatch(partnerActions.onGetListPartner())
   }, [])
 
-  console.log('dataList', dataList)
-
   // Call api khi xoá partner
   const handleDeletePartners = () => {
     dispatch(partnerActions.onRemovePartner())
