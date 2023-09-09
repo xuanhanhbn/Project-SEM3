@@ -77,6 +77,21 @@ const StyledGrid1 = styled(Grid)(({ theme }) => ({
 }))
 
 function PartnerDetail() {
+  const breadcrumbItems = [
+    { title: 'Company Active' },
+    { href: '/partners-listing', title: 'Partner List' },
+    { title: 'Partner Detail' }
+  ]
+
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
   const router = useRouter()
   const globalData = router?.query
   const dispatch = useDispatch()
@@ -89,6 +104,10 @@ function PartnerDetail() {
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
+
+  const [values, setValues] = useState({
+    editText: true
+  })
 
   //get data
   useEffect(() => {
@@ -114,36 +133,18 @@ function PartnerDetail() {
     }
   }, [isUpdateSuccess])
 
-  const [values, setValues] = useState({
-    editText: true
-  })
-
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(validationSchema)
-  })
-
-  const breadcrumbItems = [
-    { title: 'Company Active' },
-    { href: '/partners-listing', title: 'Partner List' },
-    { title: 'Partner Detail' }
-  ]
-
-  const handleChangeImageAvatar = info => {
+  const handleUploadImage = info => {
     const files = info.file || {}
     if (info.file.status === 'uploading') {
       // setLoading(true);
 
       return
     }
+
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, url => {
-        const blobFromFile = new Blob([], { type: 'image/jpeg' })
+        const blobFromFile = new Blob([info.file.originFileObj], { type: 'image/jpeg' })
         const formData = new FormData()
         formData.append('file', blobFromFile, files?.name)
 
@@ -152,16 +153,10 @@ function PartnerDetail() {
     }
   }
 
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
   const handleClickEditText = () => {
     setValues({ editText: false })
     document.getElementById('name').focus()
   }
-
-  // console.log('partnerDetail: ', partnerDetail)
 
   useEffect(() => {
     if (partnerDetail && Object.keys(partnerDetail).length) {
@@ -276,7 +271,8 @@ function PartnerDetail() {
                         flexDirection: 'column',
                         alignItems: 'center',
                         padding: '14px 24px',
-                        marginRight: 24
+                        marginRight: 24,
+                        width: '40%'
                       }}
                     >
                       <ImgStyled
@@ -290,7 +286,7 @@ function PartnerDetail() {
                         listType='picture'
                         accept='image/png, image/jpeg,image/jpg'
                         beforeUpload={beforeUpload}
-                        onChange={handleChangeImageAvatar}
+                        onChange={handleUploadImage}
                       >
                         <ButtonStyled variant='outlined' size='large'>
                           <UploadOutlined />
