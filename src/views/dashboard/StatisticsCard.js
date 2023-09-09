@@ -15,60 +15,79 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 
-const salesData = [
-  {
-    field: 'monthCustomer',
-    title: 'monthCustomer',
-    color: 'primary',
-    icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    field: 'monthIncome',
-    title: 'monthIncome',
-    color: 'success',
-    icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    field: 'monthTransaction',
-    color: 'warning',
-    title: 'monthTransaction',
-    icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
-  }
-]
-
-const renderStats = data => {
-  const renderValue = item => {
-    return <Typography variant='h6'>{data[item.field]}</Typography>
-  }
-
-  return salesData.map((item, index) => (
-    <Grid item xs={12} sm={3} key={index}>
-      <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar
-          variant='rounded'
-          sx={{
-            mr: 3,
-            width: 44,
-            height: 44,
-            boxShadow: 3,
-            color: 'common.white',
-            backgroundColor: `${item.color}.main`
-          }}
-        >
-          {item.icon}
-        </Avatar>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant='caption'>{item.title}</Typography>
-          {renderValue(item)}
-          <Typography variant='h6'>{item.stats}</Typography>
-        </Box>
-      </Box>
-    </Grid>
-  ))
-}
-
 const StatisticsCard = props => {
   const { dataDashboard } = props
+
+  console.log('dataDashboard', dataDashboard)
+
+  // tổng số lượt donation
+  const totalTransactions = dataDashboard.length
+
+  // tổng số program có phát sinh donation
+  const uniqueProgramNames = new Set()
+
+  for (const data of dataDashboard) {
+    uniqueProgramNames.add(data.programName)
+  }
+
+  // tổng số program có phát sinh donation
+  const uniquePartnerName = new Set()
+
+  for (const data of dataDashboard) {
+    uniquePartnerName.add(data.partnerName)
+  }
+
+  const salesData = [
+    {
+      field: 'monthCustomer',
+      title: `+${uniqueProgramNames.size} Program has generated donation`,
+      color: 'primary',
+      icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      field: 'monthIncome',
+      title: `+${uniquePartnerName.size} Partner has generated donation`,
+      color: 'success',
+      icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
+    },
+    {
+      field: 'monthTransaction',
+      color: 'warning',
+      title: `+${totalTransactions} Donations`,
+      icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
+    }
+  ]
+
+  const renderStats = data => {
+    const renderValue = item => {
+      return <Typography variant='h6'>{data[item.field]}</Typography>
+    }
+
+    return salesData.map((item, index) => (
+      <Grid item xs={12} sm={3} key={index}>
+        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            variant='rounded'
+            sx={{
+              mr: 3,
+              width: 44,
+              height: 44,
+              boxShadow: 3,
+              color: 'common.white',
+              backgroundColor: `${item.color}.main`
+            }}
+          >
+            {item.icon}
+          </Avatar>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='caption'>{item.title}</Typography>
+            {renderValue(item)}
+            <Typography variant='h6'>{item.stats}</Typography>
+          </Box>
+        </Box>
+      </Grid>
+    ))
+  }
 
   return (
     <Card>
@@ -82,8 +101,8 @@ const StatisticsCard = props => {
         subheader={
           <Typography variant='body2'>
             <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Total 48.5% growth
-            </Box>{' '}
+              Total 100% growth
+            </Box>
             😎 this month
           </Typography>
         }

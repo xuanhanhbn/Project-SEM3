@@ -189,8 +189,16 @@ function PartnerDetail() {
       return <div className='text-danger font-weight-bold'>Closed</div>
     }
 
-    if (field === 'createdAt' || field === 'endDate') {
-      const formatDate = moment(item?.createdAt).format('YYYY/MM/DD')
+    if (field === 'endDate') {
+      console.log('item', item)
+      const formatDate = moment(item?.endDate).format('YYYY/MM/DD')
+
+      return <div>{formatDate}</div>
+    }
+
+    if (field === 'createdAt') {
+      console.log('item', item)
+      const formatDate = moment(item?.partner.partnerThumbnail.createdAt).format('YYYY/MM/DD')
 
       return <div>{formatDate}</div>
     }
@@ -302,7 +310,7 @@ function PartnerDetail() {
                       }}
                     >
                       <div className='d-flex align-items-center mb-2'>
-                        <InputLabel style={{ marginRight: 15 }}>Name: </InputLabel>
+                        <InputLabel style={{ marginRight: 15, minWidth: 90 }}>Name: </InputLabel>
                         <Controller
                           control={control}
                           render={({ field: { onChange, value } }) => {
@@ -328,7 +336,7 @@ function PartnerDetail() {
                       </div>
 
                       <div className='d-flex align-items-center mb-2'>
-                        <InputLabel style={{ marginRight: 15 }}>Email</InputLabel>
+                        <InputLabel style={{ marginRight: 15, minWidth: 90 }}>Email</InputLabel>
                         <Controller
                           control={control}
                           render={({ field: { onChange, value } }) => {
@@ -351,8 +359,10 @@ function PartnerDetail() {
                           name='email'
                         />
                       </div>
-                      <div className='d-flex align-items-center'>
-                        <InputLabel style={{ overflow: 'visible' }}>Description: </InputLabel>
+                      <div className='d-flex '>
+                        <InputLabel style={{ overflow: 'visible', marginRight: 15, minWidth: 90 }}>
+                          Description:{' '}
+                        </InputLabel>
 
                         <Controller
                           control={control}
@@ -365,9 +375,10 @@ function PartnerDetail() {
                                 style={{
                                   border: !values.editText ? '1px solid #eee' : 'none',
                                   borderRadius: !values.editText ? 8 : 0,
-                                  color: 'black'
+                                  color: 'black',
+                                  backgroundColor: 'transparent'
                                 }}
-                                showCount
+                                autoSize
                               />
                             )
                           }}

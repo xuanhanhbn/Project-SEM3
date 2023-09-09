@@ -18,7 +18,14 @@ import { useEffect, useState } from 'react'
 const IncomOverview = props => {
   const { dataDashboard } = props
 
-  const incomeByMonths = dataDashboard?.incomeByMonths
+  // const incomeByMonths = dataDashboard?.incomeByMonths
+
+  // console.log('incomeByMonths', incomeByMonths)
+
+  // tổng tiền dontaion
+  const totalAmount = dataDashboard.reduce((total, donation) => {
+    return total + donation.amount
+  }, 0)
 
   // ** Hook
   const theme = useTheme()
@@ -97,8 +104,9 @@ const IncomOverview = props => {
     let result = []
     for (let i = 0; i < categories?.length; i++) {
       const month = categories[i]
-      const matchingData = incomeByMonths?.find(item => item?.month === month)
-      const total = matchingData ? matchingData?.total : 0
+
+      // const matchingData = incomeByMonths?.find(item => item?.month === month)
+      const total = totalAmount ? totalAmount : 0
       result.push(total)
     }
 

@@ -18,25 +18,26 @@ const navigation = () => {
       isShowMenu: true,
       role: ['Admin']
     },
-    {
-      sectionTitle: 'Page List',
-      isShowMenu: true,
-      role: ['Admin']
-    },
-    {
-      title: 'Page List',
-      icon: FileDocumentMultipleOutline,
-      path: '/page-list',
-      isShowMenu: true,
-      role: ['Admin']
-    },
-    {
-      title: 'Create Page',
-      icon: HomeOutline,
-      path: '/page-list/components/form-create',
-      isShowMenu: false,
-      role: ['Admin']
-    },
+
+    // {
+    //   sectionTitle: 'Page List',
+    //   isShowMenu: true,
+    //   role: ['Admin']
+    // },
+    // {
+    //   title: 'Page List',
+    //   icon: FileDocumentMultipleOutline,
+    //   path: '/page-list',
+    //   isShowMenu: true,
+    //   role: ['Admin']
+    // },
+    // {
+    //   title: 'Create Page',
+    //   icon: HomeOutline,
+    //   path: '/page-list/components/form-create',
+    //   isShowMenu: false,
+    //   role: ['Admin']
+    // },
     {
       sectionTitle: 'Partner',
       isShowMenu: true,

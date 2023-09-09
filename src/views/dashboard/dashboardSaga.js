@@ -4,7 +4,7 @@ import { getApiDefault, postApiDefault } from './api'
 
 // Lấy danh sách Dashboard
 function* onGetList() {
-  const url = '/Admin'
+  const url = '/admin/Admin?page=0&size=100'
   try {
     const response = yield call(getApiDefault, url)
     if (response && response.status === 200) {

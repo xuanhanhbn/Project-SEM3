@@ -72,16 +72,16 @@ function PartnerList() {
               <EyeOutline />
             </Button>
           </Link>
-
+          {/* 
           <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
-          </Button>
+          </Button> */}
         </div>
       )
     }
 
     if (field === 'createdAt') {
-      const formatDate = moment(item?.createdAt).format('YYYY/MM/DD')
+      const formatDate = moment(item?.partnerThumbnail.createdAt).format('YYYY/MM/DD')
 
       return <div>{formatDate}</div>
     }

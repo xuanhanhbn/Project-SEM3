@@ -92,13 +92,17 @@ const WeeklyOverview = props => {
     }
   }
 
+  // tổng số lượt donation
+  const totalTransactions = dataDashboard.length
+
   const renderData = () => {
     const categories = options?.xaxis?.categories
     let result = []
     for (let i = 0; i < categories?.length; i++) {
       const month = categories[i]
-      const matchingData = transactionByMonths?.find(item => item?.month === month)
-      const total = matchingData ? matchingData?.total : 0
+
+      // const matchingData = transactionByMonths?.find(item => item?.month === month)
+      const total = totalTransactions
       result.push(total)
     }
 
