@@ -18,7 +18,7 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 const StatisticsCard = props => {
   const { dataDashboard } = props
 
-  console.log('dataDashboard', dataDashboard)
+  // console.log('dataDashboard', dataDashboard)
 
   // tổng số lượt donation
   const totalTransactions = dataDashboard.length

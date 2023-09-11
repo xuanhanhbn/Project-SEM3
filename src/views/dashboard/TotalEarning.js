@@ -19,6 +19,7 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { dashboardActions, makeSelectDashBoard } from './dashboardSlice'
+import { FormatListNumbered } from 'mdi-material-ui'
 
 // const data = [
 //   {
@@ -63,6 +64,8 @@ const TotalEarning = props => {
     return total + donation.amount
   }, 0)
 
+  const formatTotal = totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
   // 3 donation có amount lớn nhất
 
   let donationsCopy = dataDashboard.slice()
@@ -95,7 +98,7 @@ const TotalEarning = props => {
       <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
         <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
-            ${totalAmount}
+            ${formatTotal}
           </Typography>
         </Box>
 
@@ -160,7 +163,7 @@ const TotalEarning = props => {
 
                 <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
                   <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
-                    ${item.amount}
+                    ${item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Typography>
                   {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
                 </Box>
