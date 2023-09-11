@@ -14,28 +14,35 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+import { useEffect, useState } from 'react'
 
 const StatisticsCard = props => {
   const { dataDashboard } = props
 
-  console.log('dataDashboard', dataDashboard)
+  const [uniqueProgramNames, setUniqueProgramNames] = useState(0)
+  const [uniquePartnerName, setUniquePartnerName] = useState('')
 
   // tổng số lượt donation
   const totalTransactions = dataDashboard.length
 
   // tổng số program có phát sinh donation
-  const uniqueProgramNames = new Set()
+  // const uniqueProgramNames = new Set()
 
-  for (const data of dataDashboard) {
-    uniqueProgramNames.add(data.programName)
-  }
+  useEffect(() => {
+    if (Array.isArray(dataDashboard) && dataDashboard.length > 0) {
+      for (const data of dataDashboard) {
+        setUniqueProgramNames(data?.programName)
+        setUniquePartnerName(data?.partnerName)
+      }
+    }
+  }, [dataDashboard])
 
   // tổng số program có phát sinh donation
-  const uniquePartnerName = new Set()
+  // const uniquePartnerName = new Set()
 
-  for (const data of dataDashboard) {
-    uniquePartnerName.add(data.partnerName)
-  }
+  // for (const data of dataDashboard) {
+  //   uniquePartnerName.add(data.partnerName)
+  // }
 
   const salesData = [
     {

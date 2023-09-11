@@ -58,7 +58,7 @@ const SunEditor = dynamic(() => import('suneditor-react'), {
 
 function CreateAbouUs() {
   const breadcrumbItems = [
-    { title: 'Company Active' },
+    { title: 'Give-AID' },
     { href: '/about-us', title: 'AboutUs List' },
     { title: 'Create About' }
   ]

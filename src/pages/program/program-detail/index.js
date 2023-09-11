@@ -35,7 +35,7 @@ function ProgramDetail() {
   })
 
   const breadcrumbItems = [
-    { title: 'Company Active' },
+    { title: 'Give-AID' },
     { href: '/program', title: 'Program List' },
     { title: 'Program Detail' }
   ]
@@ -110,6 +110,8 @@ function ProgramDetail() {
     return Percentage
   }
 
+  console.log('dataDetail: ', dataDetail)
+
   return (
     <div className='container'>
       <Breadcrumb items={breadcrumbItems} />
@@ -157,7 +159,7 @@ function ProgramDetail() {
                   <div style={{ width: '70%' }}>
                     <li>
                       <h3>
-                        Start date : <span>{moment(dataDetail?.createdAt).format('YYYY-MM-DD')}</span>
+                        Start date : <span>{moment(dataDetail?.startDate).format('YYYY-MM-DD')}</span>
                       </h3>
                     </li>
                     <li>

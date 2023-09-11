@@ -15,9 +15,10 @@ import Link from 'next/link'
 
 function PartnerList() {
   const dispatch = useDispatch()
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Partner List' }]
+  const breadcrumbItems = [{ title: 'Give-AID' }, { title: 'Partner List' }]
   const globalDataPartner = useSelector(makeSelectPartner)
   const { isLoading, isSuccess, isError, dataList, isRemove } = globalDataPartner
+
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
 
@@ -72,7 +73,7 @@ function PartnerList() {
               <EyeOutline />
             </Button>
           </Link>
-          {/* 
+          {/*
           <Button onClick={() => setIsOpenModalDelete(true)}>
             <Delete style={{ color: 'red' }} />
           </Button> */}

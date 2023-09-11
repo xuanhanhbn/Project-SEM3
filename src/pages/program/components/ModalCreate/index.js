@@ -30,16 +30,15 @@ import InputLabel from '@mui/material/InputLabel'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 
-import Button from '@mui/material/Button'
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Full name is required'),
   partnerId: Yup.string().required('Partner is required'),
-  donationInfo: Yup.string().required('donationInfo is required'),
-  target: Yup.string().required('target is required'),
-  endDate: Yup.string().required('endDate is required'),
-  donationReason: Yup.mixed().required('donationReason is required'),
-  description: Yup.string().required('description is required'),
+  donationInfo: Yup.string().required('Donation Info is required'),
+  target: Yup.string().required('Target is required'),
+  startDate: Yup.string().required('Start Date is required'),
+  endDate: Yup.string().required('End Date is required'),
+  donationReason: Yup.mixed().required('Donation Reason is required'),
+  description: Yup.string().required('Description is required'),
   programThumbnailId: Yup.mixed().required('Program Thumbnail is required')
 })
 
@@ -51,7 +50,7 @@ const categoryStyles = {
 }
 
 function ModalCreate(props) {
-  const { isOpenModalCreate, handleCreatePartner, onCancel, dataPartner } = props
+  const { isOpenModalCreate, dataRequest, onCancel, dataPartner } = props
   const { TextArea } = Input
 
   const [selectedOptions, setSelectedOptions] = useState([])
@@ -61,7 +60,7 @@ function ModalCreate(props) {
   const dispatch = useDispatch()
 
   const globalDataProgram = useSelector(makeSelectProgram)
-  const { isLoading, dataImage, isUploadImage, isCreate } = globalDataProgram
+  const { dataImage, isUploadImage, isCreate } = globalDataProgram
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
@@ -69,6 +68,7 @@ function ModalCreate(props) {
   const {
     handleSubmit,
     setValue,
+    getValues,
     control,
     formState: { errors }
   } = useForm({
@@ -79,6 +79,7 @@ function ModalCreate(props) {
     const newDataRequest = {
       ...data,
       endDate: moment(data?.endDate).format('YYYY/MM/DD'),
+      startDate: moment(data?.startDate).format('YYYY/MM/DD'),
       programThumbnailId: dataImage?.attachmentId
     }
     dispatch(programActions.onCreateProgram(newDataRequest))
@@ -96,7 +97,7 @@ function ModalCreate(props) {
     if (isCreate) {
       dispatch(programActions.clear())
       onCancel()
-      dispatch(programActions.onGetListProgram())
+      dispatch(programActions.onGetListProgram(dataRequest))
 
       return handleShowSnackbar('Create Program Success')
     }
@@ -287,7 +288,7 @@ function ModalCreate(props) {
                     disabledDate={disabledDate}
                     className='d-flex'
                     style={{ height: 53 }}
-                    placeholder='End Date'
+                    placeholder={item.label}
                     selected={value}
                     size='large'
                     format='DD-MM-YYYY'

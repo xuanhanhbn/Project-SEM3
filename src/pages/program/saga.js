@@ -3,8 +3,9 @@ import { getApiDefault, postApiDefault, putApiDefault } from './api'
 import { programActions } from './slice'
 
 // Get List Program
-function* onGetList() {
-  const url = '/Program?page=0&size=20'
+function* onGetList(data) {
+  const { search, isActive, page, size } = data?.payload
+  const url = `/Program?search=${search}&isActive=${isActive}&page=${page}&size=${size}`
   try {
     const response = yield call(getApiDefault, url)
     if (response && response.data && response.status === 200) {

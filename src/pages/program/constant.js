@@ -10,7 +10,11 @@ export const columns = [
     maxWidth: 170,
     name: 'Name Program'
   },
-
+  {
+    field: 'startDate',
+    maxWidth: 170,
+    name: 'Start Date'
+  },
   {
     field: 'endDate',
     maxWidth: 170,
@@ -56,6 +60,11 @@ export const inputCreateProgram = [
     label: 'Target',
     type: 'INPUT',
     type_input: 'number'
+  },
+  {
+    field: 'startDate',
+    label: 'Start Date',
+    type: 'SELECT_DATE'
   },
   {
     field: 'endDate',

@@ -16,6 +16,7 @@ export const columns = [
     maxWidth: 170,
     name: 'CreatedAt'
   },
+
   {
     field: 'actions',
     maxWidth: 170,

@@ -8,7 +8,7 @@ function* onGetListPartner() {
   try {
     const response = yield call(getApiDefault, url)
     if (response && response.data && response.status === 200) {
-      yield put(partnerActions.onGetListPartnerSuccess(response.data))
+      yield put(partnerActions.onGetListPartnerSuccess(response.data.data))
     } else {
       yield put(partnerActions.onGetListPartnerFailed())
     }

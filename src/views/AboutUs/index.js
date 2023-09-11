@@ -7,7 +7,7 @@ import { Button } from '@mui/material'
 import { useRouter } from 'next/router'
 
 function AboutUsList() {
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'AboutUs List' }]
+  const breadcrumbItems = [{ title: 'Give-AID' }, { title: 'AboutUs List' }]
   const route = useRouter()
 
   // Xử lí render ra STT & actions

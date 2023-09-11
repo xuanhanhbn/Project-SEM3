@@ -10,11 +10,15 @@ export const columns = [
     maxWidth: 170,
     name: 'Name Program'
   },
-
   {
     field: 'createdAt',
     maxWidth: 170,
     name: 'CreatedAt'
+  },
+  {
+    field: 'startDate',
+    maxWidth: 170,
+    name: 'Start At'
   },
   {
     field: 'endDate',

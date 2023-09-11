@@ -23,9 +23,12 @@ const IncomOverview = props => {
   // console.log('incomeByMonths', incomeByMonths)
 
   // tổng tiền dontaion
-  const totalAmount = dataDashboard.reduce((total, donation) => {
-    return total + donation.amount
-  }, 0)
+  const totalAmount =
+    dataDashboard &&
+    dataDashboard?.length > 0 &&
+    dataDashboard?.reduce((total, donation) => {
+      return total + donation.amount
+    }, 0)
 
   // ** Hook
   const theme = useTheme()

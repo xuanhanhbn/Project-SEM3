@@ -74,10 +74,10 @@ const BuyNowButton = () => {
             </a>
             <CardContent>
               <Typography sx={{ mb: 4 }} variant='h6'>
-                Company Active
+                Give-AID
               </Typography>
               <Typography sx={{ mb: 4 }} variant='body2'>
-                Company Active
+                Give-AID
               </Typography>
               <Typography sx={{ mb: 4 }} variant='body2'>
                 Click on below buttons to explore PRO version.
