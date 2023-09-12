@@ -51,6 +51,7 @@ import { FormatListNumbered } from 'mdi-material-ui'
 
 const TotalEarning = props => {
   const { dataDashboard } = props
+  const totalMonth = dataDashboard?.time?.totalDonationsMonth || 0
 
   const dispatch = useDispatch()
   const globalDataDaboard = useSelector(makeSelectDashBoard)
@@ -102,81 +103,89 @@ const TotalEarning = props => {
       <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
         <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
-            ${formatTotal}
+            ${totalMonth}
           </Typography>
         </Box>
 
         <Typography component='p' variant='caption' sx={{ mb: 9 }} />
 
-        {top3Donations &&
-          top3Donations?.length > 0 &&
-          top3Donations.map((item, index) => {
-            return (
-              <Box
-                key={item.title}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  ...(index !== top3Donations.length - 1 ? { mb: 8.5 } : {})
-                }}
-              >
-                {/* <Avatar
-                variant='rounded'
-                sx={{
-                  mr: 3,
-                  width: 40,
-                  height: 40,
-                  backgroundColor: theme => `rgba(${theme.palette.customColors.main}, 0.04)`
-                }}
-              >
-                <img src={item.imgSrc} alt={item.title} height={item.imgHeight} />
-              </Avatar> */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Box className=' justify-content-center align-items-center'>
-                      <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
-                        {item.partnerName}
-                      </Typography>
-                      {/* <Box
-                      className='d-flex justify-content-center align-items-center'
-                      sx={{ color: growth[item.subtitle] * 100 > 0 ? 'success.main' : 'red' }}
-                    >
-                      {growth[item.subtitle] * 100 < 0 && (
-                        <MenuDown sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
-                      )}
-                      {growth[item.subtitle] * 100 > 0 && (
-                        <MenuUp sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
-                      )}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+            <Box className=' justify-content-center align-items-center'>
+              <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
+                {dataDashboard?.activity?.mostPartners?.title || ''}
+              </Typography>
+            </Box>
+            <Typography variant='caption'>Most Program Partners</Typography>
+          </Box>
 
-                      <Typography
-                        variant='body2'
-                        sx={{ fontWeight: 600, color: growth[item.subtitle] * 100 > 0 ? 'success.main' : 'red' }}
-                      >
-                        {growth[item.subtitle] * 100}
-                      </Typography>
-                    </Box> */}
-                    </Box>
-                    <Typography variant='caption'>{item.programName}</Typography>
-                  </Box>
+          <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
+              {dataDashboard?.activity?.mostPartners?.programs || ''} Programs
+            </Typography>
+            {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
+          </Box>
+        </Box>
 
-                  <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
-                      ${item.amount}
-                    </Typography>
-                    {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
-                  </Box>
-                </Box>
-              </Box>
-            )
-          })}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+            <Box className=' justify-content-center align-items-center'>
+              <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
+                {dataDashboard?.activity?.mostDonated?.title || ''}
+              </Typography>
+            </Box>
+            <Typography variant='caption'>Donate the most</Typography>
+          </Box>
+
+          <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
+              ${dataDashboard?.activity?.mostDonated?.donations || ''}
+            </Typography>
+            {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+            <Box className=' justify-content-center align-items-center'>
+              <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
+                {dataDashboard?.activity?.mostRegistered?.title || ''}
+              </Typography>
+            </Box>
+            <Typography variant='caption'>Most subscriptions</Typography>
+          </Box>
+
+          <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
+              {dataDashboard?.activity?.mostRegistered?.registered || ''} Registered
+            </Typography>
+            {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   )

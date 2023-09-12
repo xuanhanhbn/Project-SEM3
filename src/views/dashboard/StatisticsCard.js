@@ -47,13 +47,13 @@ const StatisticsCard = props => {
   const salesData = [
     {
       field: 'Total Activities',
-      title: `+${dataDashboard.general.totalActivities} Total Activities`,
+      title: `+${dataDashboard.general?.totalActivities} Total Activities`,
       color: 'primary',
       icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
     },
     {
       field: 'Total Donations',
-      title: `+${dataDashboard.general.totalDonations} Total Donations`,
+      title: `+${dataDashboard.general?.totalDonations} Total Donations`,
       color: 'success',
       icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
     },
@@ -95,6 +95,8 @@ const StatisticsCard = props => {
       </Grid>
     ))
   }
+
+  console.log('dataDashboard', dataDashboard)
 
   return (
     <Card>
