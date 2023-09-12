@@ -46,21 +46,21 @@ const StatisticsCard = props => {
 
   const salesData = [
     {
-      field: 'monthCustomer',
-      title: `+${uniqueProgramNames.size} Program has generated donation`,
+      field: 'Total Activities',
+      title: `+${dataDashboard.general.totalActivities} Total Activities`,
       color: 'primary',
       icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
     },
     {
-      field: 'monthIncome',
-      title: `+${uniquePartnerName.size} Partner has generated donation`,
+      field: 'Total Donations',
+      title: `+${dataDashboard.general.totalDonations} Total Donations`,
       color: 'success',
       icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
     },
     {
-      field: 'monthTransaction',
+      field: 'Total User ',
       color: 'warning',
-      title: `+${totalTransactions} Donations`,
+      title: `+${dataDashboard.general?.totalUser} Total User`,
       icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
     }
   ]

@@ -37,13 +37,11 @@ const Dashboard = () => {
   const router = useRouter()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
 
-  // useEffect(() => {
-  //   if (dataLogin && dataUser?.roles?.toString() === 'Admin') {
-  //     dispatch(dashboardActions.getListDashBoard())
-  //   } else {
-  //     router.back()
-  //   }
-  // }, [dataLogin])
+  useEffect(() => {
+    if (dataLogin) {
+      dispatch(dashboardActions.getListDashBoard())
+    }
+  }, [dataLogin])
 
   return (
     <ApexChartWrapper className='d-flex justify-content-center align-items-center'>

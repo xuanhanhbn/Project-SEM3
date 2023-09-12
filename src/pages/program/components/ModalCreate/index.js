@@ -7,6 +7,9 @@ import * as Yup from 'yup'
 import { inputCreateProgram } from '../../constant'
 import { OutlinedInput, InputAdornment } from '@mui/material'
 
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
 import { Input } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { makeSelectPartner, makeSelectProgram, programActions } from '../../slice'
@@ -50,8 +53,11 @@ const categoryStyles = {
 }
 
 function ModalCreate(props) {
-  const { isOpenModalCreate, dataRequest, onCancel, dataPartner } = props
+  const { isOpenModalCreate, dataRequest, onCancel, dataPartner, type, dataDetail } = props
   const { TextArea } = Input
+  dayjs.extend(customParseFormat)
+
+  console.log('dataDetail: ', dataDetail)
 
   const [selectedOptions, setSelectedOptions] = useState([])
   const [labelPartner, setLabelPartner] = useState(null)
@@ -64,6 +70,7 @@ function ModalCreate(props) {
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
+  const dateFormat = 'YYYY-MM-DD'
 
   const {
     handleSubmit,
@@ -84,6 +91,38 @@ function ModalCreate(props) {
     }
     dispatch(programActions.onCreateProgram(newDataRequest))
   }
+
+  useEffect(() => {
+    if (dataDetail) {
+      if (Array.isArray(dataDetail?.donationReason) && dataDetail?.donationReason.length > 0) {
+        const option = []
+        dataDetail?.donationReason.map(item => {
+          const dataReason = {
+            label: item,
+            value: item
+          }
+
+          option.push(dataReason)
+          setLabelReason(option)
+        })
+      }
+
+      const defaultPartner = {
+        label: 'a',
+        value: 'a'
+      }
+
+      setValue('name', dataDetail.name)
+      setValue('donationInfo', dataDetail.donationInfo)
+      setValue('target', dataDetail.target)
+      setValue('startDate', dataDetail?.startDate)
+      setValue('endDate', dataDetail.endDate)
+      setLabelPartner(defaultPartner)
+      setValue('description', dataDetail.description)
+
+      setValue('programThumbnailId', dataDetail.programThumbnail.name)
+    }
+  }, [dataDetail])
 
   useEffect(() => {
     if (isUploadImage) {
@@ -168,6 +207,14 @@ function ModalCreate(props) {
 
     // So sánh ngày hiện tại với ngày được chọn
     return current && current < currentDate
+  }
+
+  const handleSetDefaultValue = item => {
+    if (item.field === 'startDate') {
+      return dayjs(dataDetail?.startDate, dateFormat)
+    }
+
+    return dayjs(dataDetail?.endDate, dateFormat)
   }
 
   const renderDefaultInput = item => {
@@ -290,8 +337,9 @@ function ModalCreate(props) {
                     style={{ height: 53 }}
                     placeholder={item.label}
                     selected={value}
+                    defaultValue={handleSetDefaultValue(item)}
                     size='large'
-                    format='DD-MM-YYYY'
+                    format='YYYY-MM-DD'
                   />
                 </DatePickerWrapper>
               )
@@ -323,6 +371,7 @@ function ModalCreate(props) {
                     getOptionLabel={option => option.label}
                     getOptionValue={option => option.value}
                     isMulti
+                    className='z-2'
                     isSearchable
                     isClearable
                     styles={categoryStyles}
@@ -409,7 +458,7 @@ function ModalCreate(props) {
       <Modal
         style={{ top: 20 }}
         width={1120}
-        title='Create Program'
+        title={type === 'update' ? 'Update Program' : 'Create Program'}
         open={isOpenModalCreate}
         onOk={handleSubmit(onSubmit)}
         onCancel={onCancel}

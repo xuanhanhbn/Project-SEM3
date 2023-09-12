@@ -13,13 +13,13 @@ import ModalCreate from './components/ModalCreate'
 import { makeSelectPartner, partnerActions } from '../partners-listing/slice'
 import Link from 'next/link'
 import Loading from 'src/components/Loading'
-import { Search } from '@mui/icons-material'
+import { Edit, Search } from '@mui/icons-material'
 
 function ProgramList() {
   const dispatch = useDispatch()
   const breadcrumbItems = [{ title: 'Give-AID' }, { title: 'Program List' }]
   const globalDataProgram = useSelector(makeSelectProgram)
-  const { isLoading, isSuccess, isError, dataList } = globalDataProgram
+  const { isLoading, isSuccess, isError, dataList, dataDetail } = globalDataProgram
   const globalDataPartner = useSelector(makeSelectPartner)
   const dataPartner = globalDataPartner?.dataList || []
   const { isUploadImage } = globalDataPartner
@@ -37,6 +37,7 @@ function ProgramList() {
   const [dataRequest, setDataRequest] = useState(baseRequest)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false)
+  const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false)
 
   // Call api khi lần đầu vào trang
   useEffect(() => {
@@ -74,6 +75,11 @@ function ProgramList() {
     }
   }
 
+  const handleGetDataDetails = item => {
+    setIsOpenModalUpdate(true)
+    dispatch(programActions.onGetDetailProgram(item))
+  }
+
   const parseData = useCallback((item, field, index) => {
     if (field === 'index') {
       return index + 1
@@ -106,9 +112,9 @@ function ProgramList() {
             </Button>
           </Link>
 
-          {/* <Button onClick={() => setIsOpenModalDelete(true)}>
-            <Delete style={{ color: 'red' }} />
-          </Button> */}
+          <Button onClick={() => handleGetDataDetails(item)}>
+            <Edit style={{ color: 'red' }} />
+          </Button>
         </div>
       )
     }
@@ -184,6 +190,19 @@ function ProgramList() {
             isUploadImage={isUploadImage}
             isOpenModalCreate={isOpenModalCreate}
             onCancel={() => setIsOpenModalCreate(false)}
+            type='create'
+          />
+        )}
+
+        {isOpenModalUpdate && (
+          <ModalCreate
+            dataRequest={dataRequest}
+            dataPartner={dataPartner}
+            isUploadImage={isUploadImage}
+            isOpenModalCreate={isOpenModalUpdate}
+            onCancel={() => setIsOpenModalUpdate(false)}
+            dataDetail={dataDetail}
+            type='update'
           />
         )}
       </div>
