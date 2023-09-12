@@ -140,7 +140,9 @@ const IncomOverview = props => {
           <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
         </Box>
         <Button fullWidth variant='contained'>
-          Details
+          <Link passHref href='/partners-listing'>
+            <p style={{ color: 'white', textDecoration: 'none' }}>Details</p>
+          </Link>
         </Button>
       </CardContent>
     </Card>
