@@ -78,7 +78,7 @@ const StyledGrid1 = styled(Grid)(({ theme }) => ({
 
 function PartnerDetail() {
   const breadcrumbItems = [
-    { title: 'Company Active' },
+    { title: 'Give-AID' },
     { href: '/partners-listing', title: 'Partner List' },
     { title: 'Partner Detail' }
   ]
@@ -197,7 +197,6 @@ function PartnerDetail() {
     }
 
     if (field === 'createdAt') {
-      console.log('item', item)
       const formatDate = moment(item?.partner.partnerThumbnail.createdAt).format('YYYY/MM/DD')
 
       return <div>{formatDate}</div>

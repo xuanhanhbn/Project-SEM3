@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
 
 // ** MUI Imports
@@ -60,20 +61,23 @@ const TotalEarning = props => {
   }, [])
 
   // tổng tiền dontaion
-  const totalAmount = dataDashboard.reduce((total, donation) => {
-    return total + donation.amount
-  }, 0)
-
-  const formatTotal = totalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const totalAmount =
+    dataDashboard &&
+    dataDashboard?.length > 0 &&
+    dataDashboard?.reduce((total, donation) => {
+      return total + donation.amount || 0
+    }, 0)
 
   // 3 donation có amount lớn nhất
 
-  let donationsCopy = dataDashboard.slice()
+  let donationsCopy = dataDashboard && dataDashboard?.leng > 0 && dataDashboard?.slice()
 
   const getTopThreeDonations = donations => {
-    donations.sort((a, b) => b.amount - a.amount)
+    if (donations) {
+      donations?.sort((a, b) => b?.amount - a?.amount)
 
-    return donations.slice(0, 3)
+      return donations?.slice(0, 3)
+    }
   }
 
   const top3Donations = getTopThreeDonations(donationsCopy)
@@ -104,17 +108,19 @@ const TotalEarning = props => {
 
         <Typography component='p' variant='caption' sx={{ mb: 9 }} />
 
-        {top3Donations.map((item, index) => {
-          return (
-            <Box
-              key={item.title}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                ...(index !== top3Donations.length - 1 ? { mb: 8.5 } : {})
-              }}
-            >
-              {/* <Avatar
+        {top3Donations &&
+          top3Donations?.length > 0 &&
+          top3Donations.map((item, index) => {
+            return (
+              <Box
+                key={item.title}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  ...(index !== top3Donations.length - 1 ? { mb: 8.5 } : {})
+                }}
+              >
+                {/* <Avatar
                 variant='rounded'
                 sx={{
                   mr: 3,
@@ -125,21 +131,21 @@ const TotalEarning = props => {
               >
                 <img src={item.imgSrc} alt={item.title} height={item.imgHeight} />
               </Avatar> */}
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Box className=' justify-content-center align-items-center'>
-                    <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
-                      {item.partnerName}
-                    </Typography>
-                    {/* <Box
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+                    <Box className=' justify-content-center align-items-center'>
+                      <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
+                        {item.partnerName}
+                      </Typography>
+                      {/* <Box
                       className='d-flex justify-content-center align-items-center'
                       sx={{ color: growth[item.subtitle] * 100 > 0 ? 'success.main' : 'red' }}
                     >
@@ -157,20 +163,20 @@ const TotalEarning = props => {
                         {growth[item.subtitle] * 100}
                       </Typography>
                     </Box> */}
+                    </Box>
+                    <Typography variant='caption'>{item.programName}</Typography>
                   </Box>
-                  <Typography variant='caption'>{item.programName}</Typography>
-                </Box>
 
-                <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
-                    ${item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  </Typography>
-                  {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
+                  <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
+                      ${item.amount}
+                    </Typography>
+                    {/* <LinearProgress color={item.color} value={item.progress} variant='determinate' /> */}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          )
-        })}
+            )
+          })}
       </CardContent>
     </Card>
   )

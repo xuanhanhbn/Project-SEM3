@@ -62,11 +62,7 @@ const SunEditor = dynamic(() => import('suneditor-react'), {
 })
 
 function CreatePageList() {
-  const breadcrumbItems = [
-    { title: 'Company Active' },
-    { href: '/page-list', title: 'Page List' },
-    { title: 'Create Page' }
-  ]
+  const breadcrumbItems = [{ title: 'Give-AID' }, { href: '/page-list', title: 'Page List' }, { title: 'Create Page' }]
 
   const {
     control,

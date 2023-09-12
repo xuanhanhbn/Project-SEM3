@@ -11,7 +11,7 @@ import Loading from 'src/components/Loading'
 import { useSnackbar } from 'notistack'
 
 function PageList() {
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Page List' }]
+  const breadcrumbItems = [{ title: 'Give-AID' }, { title: 'Page List' }]
   const { enqueueSnackbar } = useSnackbar()
 
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button } from '@mui/material'
-import { Modal } from 'antd'
+import { Button, TextField } from '@mui/material'
+import { Input, Modal } from 'antd'
 import { Breadcrumb } from 'antd'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,14 +12,14 @@ import { useSnackbar } from 'notistack'
 import ModalCreate from './components/ModalCreate'
 import { makeSelectPartner, partnerActions } from '../partners-listing/slice'
 import Link from 'next/link'
-import moment from 'moment'
 import Loading from 'src/components/Loading'
+import { Edit, Search } from '@mui/icons-material'
 
 function ProgramList() {
   const dispatch = useDispatch()
-  const breadcrumbItems = [{ title: 'Company Active' }, { title: 'Program List' }]
+  const breadcrumbItems = [{ title: 'Give-AID' }, { title: 'Program List' }]
   const globalDataProgram = useSelector(makeSelectProgram)
-  const { isLoading, isSuccess, isError, dataList } = globalDataProgram
+  const { isLoading, isSuccess, isError, dataList, dataDetail } = globalDataProgram
   const globalDataPartner = useSelector(makeSelectPartner)
   const dataPartner = globalDataPartner?.dataList || []
   const { isUploadImage } = globalDataPartner
@@ -27,29 +27,33 @@ function ProgramList() {
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
 
+  const baseRequest = {
+    search: '',
+    isActive: false,
+    page: 0,
+    size: 10
+  }
+
+  const [dataRequest, setDataRequest] = useState(baseRequest)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false)
+  const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false)
 
   // Call api khi lần đầu vào trang
   useEffect(() => {
-    dispatch(programActions.onGetListProgram())
     dispatch(partnerActions.onGetListPartner())
+
+    handleQuery()
   }, [])
+
+  const handleQuery = data => {
+    dispatch(programActions.onGetListProgram(data || dataRequest))
+  }
 
   // Call api khi xoá partner
   const handleDeletePartners = () => {
     dispatch(programActions.onRemoveProgram())
   }
-
-  // Xử lí khi xoá thành công
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(programActions.clear())
-  //     setIsOpenModalDelete(false)
-
-  //     // return handleShowSnackbar('Success')
-  //   }
-  // }, [isSuccess])
 
   // Xử lí khi xoá thất bại
   useEffect(() => {
@@ -59,6 +63,22 @@ function ProgramList() {
       return handleShowSnackbar('Error', 'error')
     }
   }, [isError])
+
+  const handldataUpdateDataRequest = (data, config) => {
+    if (config.field === 'text') {
+      const newDataRequest = {
+        ...dataRequest,
+        search: data?.target?.value
+      }
+
+      return setDataRequest(newDataRequest)
+    }
+  }
+
+  const handleGetDataDetails = item => {
+    setIsOpenModalUpdate(true)
+    dispatch(programActions.onGetDetailProgram(item))
+  }
 
   const parseData = useCallback((item, field, index) => {
     if (field === 'index') {
@@ -92,9 +112,9 @@ function ProgramList() {
             </Button>
           </Link>
 
-          {/* <Button onClick={() => setIsOpenModalDelete(true)}>
-            <Delete style={{ color: 'red' }} />
-          </Button> */}
+          <Button onClick={() => handleGetDataDetails(item)}>
+            <Edit style={{ color: 'red' }} />
+          </Button>
         </div>
       )
     }
@@ -102,12 +122,32 @@ function ProgramList() {
     return item[field]
   }, [])
 
+  const onChangePage = useCallback(
+    page => {
+      const newDataRequest = {
+        ...dataRequest,
+        page
+      }
+      setDataRequest(newDataRequest)
+      handleQuery(newDataRequest)
+    },
+    [dataRequest, setDataRequest]
+  )
+
   return (
     <div className='container'>
       <Loading isLoading={isLoading} />
       <Breadcrumb items={breadcrumbItems} />
       <div>
         <div className='d-flex justify-content-end mt-3'>
+          <Input
+            placeholder='Search'
+            onChange={data => handldataUpdateDataRequest(data, { field: 'text' })}
+            onPressEnter={() => handleQuery(dataRequest)}
+            value={dataRequest.search}
+            style={{ width: '20%', marginRight: 10 }}
+            suffix={<Search />}
+          />
           <Button
             style={{ backgroundColor: '#9155FD', color: 'white' }}
             size='large'
@@ -119,10 +159,15 @@ function ProgramList() {
         </div>
         <div className='mt-3'>
           <CustomTable
-            data={dataList || []}
+            data={(dataList && dataList.data) || []}
             columns={columns}
             parseFunction={parseData}
             isShowPaging
+            onChangePage={page => onChangePage(page - 1)}
+            totalCountData={(dataList && dataList.total) || 0}
+            defaultPage={dataRequest.page + 1}
+            currentPage={dataRequest.page + 1}
+            totalDisplay={dataRequest.size || 10}
             classNameTable='tblCampaignReport'
           />
         </div>
@@ -132,6 +177,7 @@ function ProgramList() {
             open={isOpenModalDelete}
             onOk={() => handleDeletePartners()}
             onCancel={() => setIsOpenModalDelete(false)}
+            dataRequest={dataRequest}
           >
             <p>Some contents...</p>
           </Modal>
@@ -139,10 +185,24 @@ function ProgramList() {
 
         {isOpenModalCreate && (
           <ModalCreate
+            dataRequest={dataRequest}
             dataPartner={dataPartner}
             isUploadImage={isUploadImage}
             isOpenModalCreate={isOpenModalCreate}
             onCancel={() => setIsOpenModalCreate(false)}
+            type='create'
+          />
+        )}
+
+        {isOpenModalUpdate && (
+          <ModalCreate
+            dataRequest={dataRequest}
+            dataPartner={dataPartner}
+            isUploadImage={isUploadImage}
+            isOpenModalCreate={isOpenModalUpdate}
+            onCancel={() => setIsOpenModalUpdate(false)}
+            dataDetail={dataDetail}
+            type='update'
           />
         )}
       </div>

@@ -93,7 +93,7 @@ const WeeklyOverview = props => {
   }
 
   // tổng số lượt donation
-  const totalTransactions = dataDashboard.length
+  const totalTransactions = dataDashboard?.length || 0
 
   const renderData = () => {
     const categories = options?.xaxis?.categories

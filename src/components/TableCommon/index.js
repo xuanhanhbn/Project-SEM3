@@ -129,7 +129,9 @@ const CustomTable = props => {
 
   // thêm key vào mỗi item để phù hợp với dataSource
   const getData = () =>
-    data.map((item, index) => ({
+    data &&
+    data?.length > 0 &&
+    data?.map((item, index) => ({
       ...item,
       key: primaryKey && item[primaryKey] ? item[primaryKey] : `${index}`
     }))
@@ -197,7 +199,7 @@ const CustomTable = props => {
     rowExpandable: expandCondition ? record => expandCondition(record) : null
   })
 
-  const handleChangeSortFilter = (newPagination, filters, sorter) => onSort(sorter)
+  // const handleChangeSortFilter = (newPagination, filters, sorter) => onSort(sorter)
 
   return (
     <div className='root'>
@@ -211,8 +213,9 @@ const CustomTable = props => {
         expandable={getExpandableConfig()}
         rowKey={primaryKey}
         className={classNameTable}
-        onChange={handleChangeSortFilter}
         {...iterableProps}
+
+        // onChange={handleChangeSortFilter}
       />
     </div>
   )

@@ -14,46 +14,53 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+import { useEffect, useState } from 'react'
 
 const StatisticsCard = props => {
   const { dataDashboard } = props
 
-  // console.log('dataDashboard', dataDashboard)
+  const [uniqueProgramNames, setUniqueProgramNames] = useState(0)
+  const [uniquePartnerName, setUniquePartnerName] = useState('')
 
   // tổng số lượt donation
   const totalTransactions = dataDashboard.length
 
   // tổng số program có phát sinh donation
-  const uniqueProgramNames = new Set()
+  // const uniqueProgramNames = new Set()
 
-  for (const data of dataDashboard) {
-    uniqueProgramNames.add(data.programName)
-  }
+  useEffect(() => {
+    if (Array.isArray(dataDashboard) && dataDashboard.length > 0) {
+      for (const data of dataDashboard) {
+        setUniqueProgramNames(data?.programName)
+        setUniquePartnerName(data?.partnerName)
+      }
+    }
+  }, [dataDashboard])
 
   // tổng số program có phát sinh donation
-  const uniquePartnerName = new Set()
+  // const uniquePartnerName = new Set()
 
-  for (const data of dataDashboard) {
-    uniquePartnerName.add(data.partnerName)
-  }
+  // for (const data of dataDashboard) {
+  //   uniquePartnerName.add(data.partnerName)
+  // }
 
   const salesData = [
     {
-      field: 'monthCustomer',
-      title: `+${uniqueProgramNames.size} Program has generated donation`,
+      field: 'Total Activities',
+      title: `+${dataDashboard.general.totalActivities} Total Activities`,
       color: 'primary',
       icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
     },
     {
-      field: 'monthIncome',
-      title: `+${uniquePartnerName.size} Partner has generated donation`,
+      field: 'Total Donations',
+      title: `+${dataDashboard.general.totalDonations} Total Donations`,
       color: 'success',
       icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
     },
     {
-      field: 'monthTransaction',
+      field: 'Total User ',
       color: 'warning',
-      title: `+${totalTransactions} Donations`,
+      title: `+${dataDashboard.general?.totalUser} Total User`,
       icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
     }
   ]

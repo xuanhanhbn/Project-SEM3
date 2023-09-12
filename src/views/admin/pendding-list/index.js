@@ -10,7 +10,7 @@ import { IconButton } from '@mui/material'
 import Actions from './components/Actions'
 
 function PenddingList() {
-  const breadcrumbItems = [{ href: '', title: 'Company Active' }, { title: 'Approval Pending List' }]
+  const breadcrumbItems = [{ href: '', title: 'Give-AID' }, { title: 'Approval Pending List' }]
 
   // Xử lí render ra STT & actions
   const parseData = useCallback((item, field, index) => {

@@ -168,39 +168,6 @@ function ModalCreate(props) {
       )
     }
 
-    // if (item.type === 'SELECT') {
-    //   const { field } = item
-    //   const message = errors[field] && errors[field].message
-
-    //   return (
-    //     <div style={{ paddingTop: '1rem' }}>
-    //       <Controller
-    //         control={control}
-    //         render={({ field }) => {
-    //           return (
-    //             <Upload
-    //               {...field}
-    //               style={{ marginBottom: 10 }}
-    //               maxCount={1}
-    //               name={item.field}
-    //               listType='picture'
-    //               accept='image/png, image/jpeg,image/jpg'
-    //               beforeUpload={beforeUpload}
-    //               onChange={handleUploadImage}
-    //             >
-    //               <ButtonStyled variant='outlined' size='large'>
-    //                 <UploadOutlined />
-    //                 <div style={{ marginLeft: 10 }}> Image</div>
-    //               </ButtonStyled>
-    //             </Upload>
-    //           )
-    //         }}
-    //         name={item.field}
-    //       />
-    //       {message && <Typography style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</Typography>}
-    //     </div>
-    //   )
-    // }
     const { field } = item
     const message = errors[field] && errors[field].message
 
