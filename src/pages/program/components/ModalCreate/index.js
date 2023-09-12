@@ -108,8 +108,8 @@ function ModalCreate(props) {
       }
 
       const defaultPartner = {
-        label: 'a',
-        value: 'a'
+        label: dataDetail?.partnerName,
+        value: dataDetail?.partnerId
       }
 
       setValue('name', dataDetail.name)
