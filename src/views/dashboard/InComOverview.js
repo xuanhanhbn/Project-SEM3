@@ -18,6 +18,8 @@ import { useEffect, useState } from 'react'
 const IncomOverview = props => {
   const { dataDashboard } = props
 
+  const totalUser = dataDashboard?.time?.newUsersMonth || 0
+
   // const incomeByMonths = dataDashboard?.incomeByMonths
 
   // console.log('incomeByMonths', incomeByMonths)
@@ -109,7 +111,7 @@ const IncomOverview = props => {
       const month = categories[i]
 
       // const matchingData = incomeByMonths?.find(item => item?.month === month)
-      const total = totalAmount ? totalAmount : 0
+      const total = totalUser ? totalUser : 0
       result.push(total)
     }
 

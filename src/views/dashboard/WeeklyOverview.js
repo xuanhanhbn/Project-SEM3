@@ -93,7 +93,7 @@ const WeeklyOverview = props => {
   }
 
   // tổng số lượt donation
-  const totalTransactions = dataDashboard?.length || 0
+  const totalTransactions = dataDashboard?.time?.newActivitiesMonth || 0
 
   const renderData = () => {
     const categories = options?.xaxis?.categories
@@ -112,7 +112,7 @@ const WeeklyOverview = props => {
   return (
     <Card>
       <CardHeader
-        title='Month Transaction Overview'
+        title='Month Programs Overview'
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
