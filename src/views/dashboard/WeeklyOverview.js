@@ -14,6 +14,7 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 const WeeklyOverview = props => {
   const { dataDashboard } = props
@@ -131,7 +132,9 @@ const WeeklyOverview = props => {
           <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
         </Box>
         <Button fullWidth variant='contained'>
-          Details
+          <Link passHref href='/program'>
+            <p style={{ color: 'white', textDecoration: 'none' }}>Details</p>
+          </Link>
         </Button>
       </CardContent>
     </Card>
