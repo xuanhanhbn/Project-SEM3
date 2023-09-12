@@ -66,7 +66,7 @@ function ModalCreate(props) {
   const dispatch = useDispatch()
 
   const globalDataProgram = useSelector(makeSelectProgram)
-  const { dataImage, isUploadImage, isCreate } = globalDataProgram
+  const { dataImage, isUploadImage, isCreate, isUpdate } = globalDataProgram
 
   const { enqueueSnackbar } = useSnackbar()
   const handleShowSnackbar = (message, variant = 'success') => enqueueSnackbar(message, { variant })
@@ -104,6 +104,7 @@ function ModalCreate(props) {
 
           option.push(dataReason)
           setLabelReason(option)
+          setValue('donationReason', option, { shouldValidate: true })
         })
       }
 
@@ -115,9 +116,11 @@ function ModalCreate(props) {
       setValue('name', dataDetail.name)
       setValue('donationInfo', dataDetail.donationInfo)
       setValue('target', dataDetail.target)
-      setValue('startDate', dataDetail?.startDate)
-      setValue('endDate', dataDetail.endDate)
+
+      // setValue('startDate', dataDetail?.startDate)
+      // setValue('endDate', dataDetail.endDate)
       setLabelPartner(defaultPartner)
+
       setValue('description', dataDetail.description)
 
       setValue('programThumbnailId', dataDetail.programThumbnail.name)
@@ -141,6 +144,16 @@ function ModalCreate(props) {
       return handleShowSnackbar('Create Program Success')
     }
   }, [isCreate])
+
+  useEffect(() => {
+    if (isUpdate) {
+      onCancel()
+      dispatch(programActions.clear())
+      dispatch(programActions.onGetListProgram(dataRequest))
+
+      return handleShowSnackbar('Create Program Success')
+    }
+  }, [isUpdate])
 
   const handleUploadImage = info => {
     const files = info.file || {}
@@ -201,20 +214,30 @@ function ModalCreate(props) {
     }
   }
 
+  const updateProgram = data => {
+    const newDataRequest = {
+      ...data,
+      programId: dataDetail?.programId
+    }
+    dispatch(programActions.onUpdateProgram(newDataRequest))
+  }
+
   const disabledDate = current => {
     // Lấy ngày hiện tại
     const currentDate = moment()
 
     // So sánh ngày hiện tại với ngày được chọn
-    return current && current < currentDate
+    return current && current <= currentDate
   }
 
   const handleSetDefaultValue = item => {
-    if (item.field === 'startDate') {
-      return dayjs(dataDetail?.startDate, dateFormat)
-    }
+    if (dataDetail && Object.keys(dataDetail).length) {
+      if (item.field === 'startDate') {
+        return dayjs(dataDetail?.startDate, dateFormat)
+      }
 
-    return dayjs(dataDetail?.endDate, dateFormat)
+      return dayjs(dataDetail?.endDate, dateFormat)
+    }
   }
 
   const renderDefaultInput = item => {
@@ -460,7 +483,7 @@ function ModalCreate(props) {
         width={1120}
         title={type === 'update' ? 'Update Program' : 'Create Program'}
         open={isOpenModalCreate}
-        onOk={handleSubmit(onSubmit)}
+        onOk={type === 'update' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
         onCancel={onCancel}
       >
         <CardContent>
