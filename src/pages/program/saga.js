@@ -67,6 +67,25 @@ function* onCreateProgram(data) {
   }
 }
 
+// Update program
+function* onUpdateProgram(data) {
+  console.log('dataSAGA: ', data)
+  const payload = data?.payload || {}
+  const { programId, ...rest } = payload
+  console.log('rest: ', rest)
+  const url = `/Program/update/${payload?.programId}`
+  try {
+    const response = yield call(putApiDefault, url, rest)
+    if (response && response.data && response.status === 200) {
+      yield put(programActions.onUpdateProgramSuccess(response.data))
+    } else {
+      yield put(programActions.onUpdateProgramFailed())
+    }
+  } catch (error) {
+    yield put(programActions.onUpdateProgramFailed('internet'))
+  }
+}
+
 // Upload image Program
 function* onUploadImage(data) {
   const payload = data?.payload
@@ -106,4 +125,5 @@ export default function* programSaga() {
   yield takeLatest(programActions.onCreateProgram, onCreateProgram)
   yield takeLatest(programActions.onGetDetailProgram, onGetListDetails)
   yield takeLatest(programActions.onCloseProgram, onCloseProgram)
+  yield takeLatest(programActions.onUpdateProgram, onUpdateProgram)
 }
