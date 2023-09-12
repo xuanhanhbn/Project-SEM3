@@ -69,10 +69,8 @@ function* onCreateProgram(data) {
 
 // Update program
 function* onUpdateProgram(data) {
-  console.log('dataSAGA: ', data)
   const payload = data?.payload || {}
   const { programId, ...rest } = payload
-  console.log('rest: ', rest)
   const url = `/Program/update/${payload?.programId}`
   try {
     const response = yield call(putApiDefault, url, rest)

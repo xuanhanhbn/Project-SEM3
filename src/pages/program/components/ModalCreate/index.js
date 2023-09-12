@@ -96,6 +96,7 @@ function ModalCreate(props) {
     if (dataDetail) {
       if (Array.isArray(dataDetail?.donationReason) && dataDetail?.donationReason.length > 0) {
         const option = []
+        const options = []
         dataDetail?.donationReason.map(item => {
           const dataReason = {
             label: item,
@@ -104,7 +105,10 @@ function ModalCreate(props) {
 
           option.push(dataReason)
           setLabelReason(option)
-          setValue('donationReason', option, { shouldValidate: true })
+          for (var i = 0; i < option.length; i++) {
+            options.push(option[i].value)
+          }
+          setValue('donationReason', options, { shouldValidate: true })
         })
       }
 
@@ -117,8 +121,8 @@ function ModalCreate(props) {
       setValue('donationInfo', dataDetail.donationInfo)
       setValue('target', dataDetail.target)
 
-      // setValue('startDate', dataDetail?.startDate)
-      // setValue('endDate', dataDetail.endDate)
+      setValue('startDate', dataDetail?.startDate)
+      setValue('endDate', dataDetail.endDate)
       setLabelPartner(defaultPartner)
 
       setValue('description', dataDetail.description)
@@ -151,7 +155,7 @@ function ModalCreate(props) {
       dispatch(programActions.clear())
       dispatch(programActions.onGetListProgram(dataRequest))
 
-      return handleShowSnackbar('Create Program Success')
+      return handleShowSnackbar('Update Program Success')
     }
   }, [isUpdate])
 
@@ -217,7 +221,11 @@ function ModalCreate(props) {
   const updateProgram = data => {
     const newDataRequest = {
       ...data,
-      programId: dataDetail?.programId
+      programId: dataDetail?.programId,
+      target: Number(data.target),
+      endDate: moment(data?.endDate).format('YYYY/MM/DD'),
+      startDate: moment(data?.startDate).format('YYYY/MM/DD'),
+      programThumbnailId: dataImage?.attachmentId
     }
     dispatch(programActions.onUpdateProgram(newDataRequest))
   }
